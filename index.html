@@ -1,18 +1,9 @@
-В игре **уже реализована ходьба вперёд и назад** относительно направления взгляда:
-
-- **W / ↑** — движение **вперёд** (в сторону, куда смотрит персонаж)
-- **S / ↓** — движение **назад** (в противоположную сторону)
-- **A / D** или **← / →** — **поворот** (меняют направление взгляда)
-
-Стрельба всегда направлена **в точку прицела** (мышь на ПК, касание на телефоне). Ниже — полностью рабочий код с этими механиками. Просто скопируйте его в HTML-файл и откройте в браузере.
-
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Zombie USSR · Вперёд/назад + прицел</title>
+    <title>Zombie USSR · Горизонтальный телефон</title>
     <style>
         * {
             box-sizing: border-box;
@@ -29,6 +20,7 @@
             margin: 0;
             font-family: 'Courier New', 'Consolas', monospace;
             touch-action: none;
+            overflow: hidden;
         }
         .pda-container {
             background: #3d1a1a;
@@ -40,6 +32,9 @@
             max-width: 520px;
             width: fit-content;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .pda-container::before {
             content: "★";
@@ -70,6 +65,7 @@
             position: relative;
             width: 420px;
             height: 600px;
+            flex-shrink: 0;
         }
         @media (max-width: 460px) {
             .pda-container {
@@ -85,8 +81,8 @@
         }
         canvas {
             display: block;
-            width: 100%;
-            height: 100%;
+            width: 100% !important;
+            height: 100% !important;
             background: #1a0f0f;
             border-radius: 8px;
             image-rendering: pixelated;
@@ -95,6 +91,8 @@
             box-shadow: inset 0 0 15px #0a0505;
             touch-action: none;
         }
+
+        /* ---------- ПАНЕЛЬ УПРАВЛЕНИЯ ---------- */
         .pda-controls {
             display: flex;
             justify-content: space-between;
@@ -109,6 +107,8 @@
             color: #f0d080;
             font-size: 14px;
             text-shadow: 0 0 6px #8a4a1a;
+            width: 100%;
+            max-width: 420px;
         }
         .pda-controls .money {
             display: flex;
@@ -178,6 +178,8 @@
             margin-top: 3px;
             letter-spacing: 0.5px;
         }
+
+        /* ---------- МАГАЗИН ---------- */
         .shop-overlay {
             position: absolute;
             top: 10px;
@@ -282,6 +284,7 @@
         .shop-close-btn:active {
             transform: scale(0.97);
         }
+
         @media (max-width: 460px) {
             .pda-controls {
                 font-size: 12px;
@@ -313,6 +316,7 @@
                 font-size: 9px;
             }
         }
+
         .shop-overlay::-webkit-scrollbar {
             width: 5px;
         }
@@ -324,12 +328,16 @@
             background: #6a3a2a;
             border-radius: 10px;
         }
+
+        /* ---------- МОБИЛЬНЫЕ КНОПКИ ---------- */
         .mobile-controls {
             display: none;
             justify-content: space-between;
             padding: 4px 6px;
             gap: 6px;
             margin-top: 4px;
+            width: 100%;
+            max-width: 420px;
         }
         .mobile-controls .ctrl-btn {
             background: rgba(40, 20, 20, 0.8);
@@ -375,6 +383,7 @@
             flex: 0.8;
             font-size: 14px;
         }
+
         @media (pointer: coarse) {
             .mobile-controls {
                 display: flex !important;
@@ -393,6 +402,119 @@
                 font-size: 16px;
             }
         }
+
+        /* ---------- ГОРИЗОНТАЛЬНАЯ ОРИЕНТАЦИЯ ДЛЯ ТЕЛЕФОНОВ ---------- */
+        @media (orientation: landscape) and (pointer: coarse) {
+            body {
+                overflow: hidden;
+                background: #0a0505;
+            }
+            .pda-container {
+                max-width: 100vw;
+                max-height: 100vh;
+                border-radius: 0;
+                padding: 4px 8px;
+                border-width: 2px;
+                box-shadow: none;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                gap: 4px;
+                background: #1a0a0a;
+                width: 100vw;
+                height: 100vh;
+            }
+            .pda-container::before,
+            .pda-container::after {
+                display: none;
+            }
+            .pda-screen {
+                width: auto;
+                height: calc(100vh - 60px);
+                aspect-ratio: 4 / 5;
+                max-width: calc(100vw - 20px);
+                padding: 4px;
+                border-radius: 10px;
+                flex-shrink: 0;
+            }
+            .pda-controls {
+                display: none; /* Скрываем на горизонтальном телефоне, так как всё управление на кнопках */
+            }
+            .mobile-controls {
+                max-width: 100%;
+                padding: 2px 4px;
+                gap: 4px;
+                flex-wrap: nowrap;
+                height: 44px;
+                margin-top: 0;
+            }
+            .mobile-controls .ctrl-btn {
+                font-size: 14px;
+                min-height: 30px;
+                padding: 2px 0;
+                border-radius: 8px;
+                box-shadow: inset 0 -3px 0 #2a0a0a;
+            }
+            .mobile-controls .ctrl-btn.fire-btn {
+                font-size: 16px;
+                flex: 2;
+            }
+            .mobile-controls .ctrl-btn.shop-btn-mob {
+                flex: 0.6;
+                font-size: 12px;
+            }
+            .mobile-controls .ctrl-btn.jump-btn {
+                flex: 0.8;
+            }
+            .hint {
+                display: none;
+            }
+            /* Магазин в горизонтали */
+            .shop-overlay {
+                top: 5px;
+                left: 5px;
+                right: 5px;
+                bottom: 5px;
+                border-radius: 8px;
+                padding: 10px;
+            }
+            .shop-title {
+                font-size: 18px;
+            }
+            .shop-item {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+            .shop-item .buy-btn {
+                font-size: 11px;
+                padding: 1px 10px;
+            }
+            .shop-close-btn {
+                font-size: 14px;
+                padding: 4px 0;
+            }
+        }
+        /* Для очень маленьких экранов в горизонтали */
+        @media (orientation: landscape) and (pointer: coarse) and (max-height: 400px) {
+            .pda-screen {
+                height: calc(100vh - 50px);
+            }
+            .mobile-controls {
+                height: 36px;
+            }
+            .mobile-controls .ctrl-btn {
+                font-size: 12px;
+                min-height: 24px;
+            }
+            .mobile-controls .ctrl-btn.fire-btn {
+                font-size: 14px;
+            }
+        }
+        /* Для планшетов и больших экранов в горизонтали (не телефоны) */
+        @media (orientation: landscape) and (pointer: fine) {
+            /* Оставляем стандартный вид для ПК */
+        }
     </style>
 </head>
 <body>
@@ -404,34 +526,36 @@
                 <div class="shop-list" id="shopList"></div>
                 <button class="shop-close-btn" id="shopCloseBtn">[ ЗАКРЫТЬ ]</button>
             </div>
-            <div class="pda-controls">
-                <div class="money" id="moneyDisplay">₽ 0</div>
-                <div class="weapon-info">
-                    <span id="weaponName">ПМ</span>
-                    <span id="weaponDamage">💥 1</span>
-                    <span style="color:#88dd88; font-weight:bold;">∞</span>
-                </div>
-                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                    <button class="pda-btn pda-btn-shop" id="shopBtn">🛒 МАГАЗИН</button>
-                    <button class="pda-btn pda-btn-restart" id="restartBtn">⟳ ЗАНОВО</button>
-                </div>
+        </div>
+        <!-- Панель управления (скрывается в горизонтали) -->
+        <div class="pda-controls" id="pdaControls">
+            <div class="money" id="moneyDisplay">₽ 0</div>
+            <div class="weapon-info">
+                <span id="weaponName">ПМ</span>
+                <span id="weaponDamage">💥 1</span>
+                <span style="color:#88dd88; font-weight:bold;">∞</span>
             </div>
-            <div class="mobile-controls" id="mobileControls">
-                <button class="ctrl-btn" id="mobLeft">◀</button>
-                <button class="ctrl-btn" id="mobRight">▶</button>
-                <button class="ctrl-btn jump-btn" id="mobJump">⬆</button>
-                <button class="ctrl-btn fire-btn" id="mobFire">🔥</button>
-                <button class="ctrl-btn shop-btn-mob" id="mobShop">🛒</button>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                <button class="pda-btn pda-btn-shop" id="shopBtn">🛒 МАГАЗИН</button>
+                <button class="pda-btn pda-btn-restart" id="restartBtn">⟳ ЗАНОВО</button>
             </div>
-            <div class="hint">
-                W / ↑ — вперёд  ·  S / ↓ — назад  ·  A / D / ← → — поворот  ·  ПРОБЕЛ — прыжок/стрельба<br>
-                🎯 Прицел — мышь / касание
-            </div>
+        </div>
+        <!-- Мобильные кнопки (всегда видны на телефонах) -->
+        <div class="mobile-controls" id="mobileControls">
+            <button class="ctrl-btn" id="mobLeft">◀</button>
+            <button class="ctrl-btn" id="mobRight">▶</button>
+            <button class="ctrl-btn jump-btn" id="mobJump">⬆</button>
+            <button class="ctrl-btn fire-btn" id="mobFire">🔥</button>
+            <button class="ctrl-btn shop-btn-mob" id="mobShop">🛒</button>
+        </div>
+        <div class="hint">
+            W / ↑ — вперёд  ·  S / ↓ — назад  ·  A / D / ← → — поворот  ·  ПРОБЕЛ — прыжок/стрельба<br>
+            🎯 Прицел — мышь / касание
         </div>
     </div>
     <script>
         // ===================================================================
-        //  ИГРА: ZOMBIE USSR · ВПЕРЁД/НАЗАД + СТРЕЛЬБА ПО ПРИЦЕЛУ
+        //  ИГРА: ZOMBIE USSR · ГОРИЗОНТАЛЬНАЯ ВЕРСИЯ ДЛЯ ТЕЛЕФОНОВ
         // ===================================================================
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -447,6 +571,7 @@
         const shopList = document.getElementById('shopList');
         const shopCloseBtn = document.getElementById('shopCloseBtn');
         const restartBtn = document.getElementById('restartBtn');
+        const pdaControls = document.getElementById('pdaControls');
 
         let gameRunning = true,
             shopOpen = false,
@@ -967,6 +1092,11 @@
             aimY = (touch.clientY - rect.top) * scaleY;
         }
 
+        // Пересчёт при изменении размера окна (ориентация)
+        window.addEventListener('resize', () => {
+            // Можно обновить координаты прицела, если нужно
+        });
+
         function handleCollisions() {
             for (let i = bullets.length - 1; i >= 0; i--) {
                 const b = bullets[i];
@@ -1198,6 +1328,7 @@
             requestAnimationFrame(gameLoop);
         }
 
+        // ---------- УПРАВЛЕНИЕ ----------
         document.addEventListener('keydown', (e) => {
             keys[e.code] = true;
             if (e.code === 'Space') e.preventDefault();
@@ -1257,9 +1388,9 @@
         shopCloseBtn.addEventListener('click', closeShop);
         restartBtn.addEventListener('click', restartGame);
 
+        // ---------- СТАРТ ----------
         initGame();
         gameLoop();
     </script>
 </body>
 </html>
-```
