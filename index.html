@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>Танки СССР — Fullscreen</title>
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Танки СССР" />
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0IAiLAogICJzaG9ydF9uYW1lIjogItCi0LDQvdC60LgiLAogICJkZXNjcmlwdGlvbiI6ICLQkdC40YLQstCwINGB0L7QstC10YHRgtGB0LrQuNGFINGC0LDQvdC60L7QsiDQuNCz0YDQsCDQvdCwIFBEQSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMWEyYTJlIiwKICAidGhlbWVfY29sb3IiOiAiIzFhMWEyZSIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEyOCAxMjgnPjxyZWN0IHdpZHRoPScxMjgnIGhlaWdodD0nMTI4JyBmaWxsPScjMWEyYTJlJy8+PHRleHQgeT0nLjhlbScgZm9udC1zaXplPSc5MCcgZmlsbD0nIzhjY2E4YycgeD0nMTAnPvCfjZ48L3RleHQ+PC9zdmc+IgogICAgfQogIF0sCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0Igp9" />
+    <title>Танки СССР — PWA</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎖️</text></svg>" />
     <style>
         * {
@@ -728,6 +733,35 @@
         (function() {
             'use strict';
 
+            // ─── PWA: РЕГИСТРАЦИЯ SERVICE WORKER ─────────────────────
+            if ('serviceWorker' in navigator) {
+                // Создаём простой Service Worker прямо в коде
+                const swCode = `
+                    self.addEventListener('install', function(e) {
+                        e.waitUntil(
+                            caches.open('tank-game-v1').then(function(cache) {
+                                return cache.addAll([
+                                    '/',
+                                    'index.html'
+                                ]);
+                            })
+                        );
+                    });
+                    self.addEventListener('fetch', function(e) {
+                        e.respondWith(
+                            caches.match(e.request).then(function(response) {
+                                return response || fetch(e.request);
+                            })
+                        );
+                    });
+                `;
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(swUrl, { scope: '/' }).catch(function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            }
+
             // ─── FULLSCREEN TOGGLE ─────────────────────────────────────
             const fullscreenBtn = document.getElementById('btnFullscreen');
             const container = document.getElementById('gameContainer');
@@ -805,7 +839,6 @@
             const ctx = canvas.getContext('2d');
             const wrapper = document.getElementById('canvasWrapper');
 
-            // Фиксированные логические размеры игры
             const GAME_W = 600;
             const GAME_H = 340;
 
@@ -813,7 +846,6 @@
                 const rect = wrapper.getBoundingClientRect();
                 const w = rect.width;
                 const h = rect.height;
-                // Сохраняем пропорции
                 const ratio = GAME_W / GAME_H;
                 let displayW = w;
                 let displayH = w / ratio;
@@ -821,17 +853,14 @@
                     displayH = h;
                     displayW = h * ratio;
                 }
-                // Устанавливаем размеры canvas
                 canvas.width = GAME_W;
                 canvas.height = GAME_H;
                 canvas.style.width = displayW + 'px';
                 canvas.style.height = displayH + 'px';
-                // Центрируем с помощью absolute и transform
                 canvas.style.position = 'absolute';
                 canvas.style.left = '50%';
                 canvas.style.top = '50%';
                 canvas.style.transform = 'translate(-50%, -50%)';
-                // Масштаб для возможного использования
                 scale = displayW / GAME_W;
             }
 
