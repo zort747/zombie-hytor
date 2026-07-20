@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Танки СССР — PDA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Танки СССР — Fullscreen</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎖️</text></svg>" />
     <style>
         * {
@@ -14,87 +14,38 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-        body {
-            background: #1a1a2e;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #0a0a12;
             font-family: 'Courier New', monospace;
-            padding: 8px;
-        }
-        .pda {
-            background: #2d2d3f;
-            border-radius: 32px 32px 28px 28px;
-            padding: 14px 14px 18px 14px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), inset 0 0 0 2px #4a4a5e, inset 0 0 0 4px #1a1a2a, 0 0 0 6px #0e0e1a;
-            position: relative;
-            max-width: 660px;
-            width: 100%;
-            transition: all 0.2s;
-        }
-        .pda::before {
-            content: '';
-            position: absolute;
-            top: -16px;
-            right: 40px;
-            width: 6px;
-            height: 24px;
-            background: linear-gradient(to top, #4a4a5e, #6a6a8a);
-            border-radius: 3px 3px 0 0;
-            box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.5);
-        }
-        .pda::after {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: 34px;
-            width: 14px;
-            height: 10px;
-            background: #4a4a5e;
-            border-radius: 50% 50% 0 0;
-            box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.4);
-        }
-        .screen-wrapper {
-            background: #1a1a28;
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 0 2px #3a3a4e;
-            margin-bottom: 10px;
-        }
-        .screen {
-            background: #1e2b1e;
-            border-radius: 10px;
-            padding: 5px;
-            box-shadow: inset 0 0 30px rgba(0, 20, 0, 0.7);
-            position: relative;
-            image-rendering: pixelated;
-        }
-        #gameCanvas {
-            display: block;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 600 / 340;
-            background: #1a2a1a;
-            border-radius: 6px;
-            cursor: none;
-            image-rendering: pixelated;
-            box-shadow: inset 0 0 40px rgba(0, 30, 0, 0.5);
             touch-action: none;
         }
-        .hud {
+        #gameContainer {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #1a1a2e;
+            position: relative;
+            overflow: hidden;
+        }
+        #hud {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 10px 6px 10px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 8px 8px 0 0;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.6);
             border-bottom: 2px solid #3a5a3a;
             font-size: 11px;
             color: #8fca8f;
             text-shadow: 0 0 8px rgba(80, 200, 80, 0.3);
             flex-wrap: wrap;
             gap: 2px 6px;
+            z-index: 10;
+            flex-shrink: 0;
+            min-height: 32px;
         }
         .hud-item {
             display: flex;
@@ -122,7 +73,7 @@
             letter-spacing: 1px;
         }
         .hud-tank {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.3);
             padding: 1px 8px 1px 5px;
             border-radius: 12px;
             border: 1px solid #3a5a3a;
@@ -136,39 +87,63 @@
             color: #c0f0c0;
             font-weight: bold;
         }
-        .controls {
+        #canvasWrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #1a2a1a;
+            min-height: 0;
+        }
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: #1a2a1a;
+            image-rendering: pixelated;
+            touch-action: none;
+            cursor: none;
+        }
+        #controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 2px 0px 2px;
-            gap: 4px;
-            flex-wrap: wrap;
+            padding: 6px 8px 12px 8px;
+            background: rgba(0, 0, 0, 0.6);
+            border-top: 2px solid #3a5a3a;
+            gap: 6px;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 10;
+            touch-action: none;
         }
         .ctrl-group {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             align-items: center;
-            flex-wrap: wrap;
+            flex-shrink: 0;
         }
         .ctrl-btn {
             background: #3a3a52;
             border: none;
             border-radius: 12px;
-            padding: 8px 12px;
-            font-size: 18px;
+            padding: 0;
+            font-size: 20px;
             color: #b0b0d0;
             box-shadow: 0 4px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
             cursor: pointer;
             transition: all 0.06s ease;
             touch-action: manipulation;
-            min-width: 48px;
-            min-height: 48px;
-            text-align: center;
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            line-height: 1.2;
+            line-height: 1;
             outline: none;
             -webkit-touch-callout: none;
+            flex-shrink: 0;
         }
         .ctrl-btn:active {
             transform: translateY(4px);
@@ -178,7 +153,7 @@
             background: #6a2a2a;
             color: #ff8888;
             box-shadow: 0 4px 0 #3a1212, inset 0 1px 0 rgba(255, 100, 100, 0.2);
-            min-width: 56px;
+            width: 64px;
         }
         .ctrl-btn.fire:active {
             background: #8a3a3a;
@@ -187,9 +162,7 @@
             background: #2a4a3a;
             color: #8fca8f;
             box-shadow: 0 4px 0 #142a1a, inset 0 1px 0 rgba(100, 255, 100, 0.1);
-            font-size: 16px;
-            padding: 8px 14px;
-            min-width: 48px;
+            font-size: 18px;
         }
         .ctrl-btn.shop-btn:active {
             background: #3a5a4a;
@@ -198,8 +171,7 @@
             background: #4a3a2a;
             color: #f0d080;
             box-shadow: 0 4px 0 #2a1a0a;
-            font-size: 16px;
-            min-width: 48px;
+            font-size: 18px;
         }
         .ctrl-btn.pause-btn:active {
             background: #5a4a3a;
@@ -208,9 +180,8 @@
             background: #3a3a4a;
             color: #a0b0d0;
             box-shadow: 0 4px 0 #1a1a2a;
-            font-size: 16px;
-            padding: 8px 10px;
-            min-width: 44px;
+            font-size: 18px;
+            width: 48px;
         }
         .ctrl-btn.barrel:active {
             background: #4a4a5a;
@@ -219,12 +190,19 @@
             background: #4a2a2a;
             color: #ff8888;
             box-shadow: 0 4px 0 #2a1212;
-            font-size: 16px;
-            padding: 8px 12px;
-            min-width: 48px;
+            font-size: 18px;
         }
         .ctrl-btn.restart-btn:active {
             background: #5a3a3a;
+        }
+        .ctrl-btn.fullscreen-btn {
+            background: #2a3a4a;
+            color: #8fcaf0;
+            box-shadow: 0 4px 0 #1a2a3a;
+            font-size: 22px;
+        }
+        .ctrl-btn.fullscreen-btn:active {
+            background: #3a4a5a;
         }
         .ctrl-btn:disabled {
             opacity: 0.4;
@@ -232,34 +210,24 @@
             box-shadow: 0 2px 0 #1a1a2a;
             pointer-events: none;
         }
-
-        /* ─── D-PAD (крестовина) ───────────────────────────────────── */
-        .dpad-group {
-            flex-shrink: 0;
-        }
+        /* D-Pad */
         .dpad {
             display: grid;
-            grid-template-columns: 52px 52px 52px;
-            grid-template-rows: 52px 52px 52px;
+            grid-template-columns: 54px 54px 54px;
+            grid-template-rows: 54px 54px 54px;
             gap: 4px;
             justify-items: center;
             align-items: center;
+            flex-shrink: 0;
         }
         .dpad .ctrl-btn {
             width: 100%;
             height: 100%;
-            min-width: unset;
-            min-height: unset;
-            padding: 0;
-            font-size: 24px;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #3a3a52;
+            font-size: 24px;
             box-shadow: 0 4px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background: #3a3a52;
             color: #b0b0d0;
-            transition: all 0.06s ease;
         }
         .dpad .ctrl-btn:active {
             transform: translateY(4px);
@@ -277,26 +245,78 @@
             background: transparent;
             pointer-events: none;
         }
-
-        /* ─── Оверлеи ────────────────────────────────────────────────── */
-        .shop-overlay {
+        /* Оверлеи */
+        .overlay {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.78);
-            backdrop-filter: blur(3px);
-            border-radius: 28px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 16px;
             z-index: 20;
+            padding: 20px;
         }
-        .shop-overlay.active {
+        .overlay.active {
             display: flex;
+        }
+        .overlay-box {
+            background: #1a1a2a;
+            border-radius: 20px;
+            padding: 24px 30px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid #3a6a3a;
+            box-shadow: 0 0 60px rgba(0, 40, 0, 0.4);
+            color: #b0f0b0;
+        }
+        .overlay-box h1 {
+            font-size: 28px;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+            color: #ff6666;
+        }
+        .overlay-box .sub {
+            color: #8a8aaa;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .overlay-box .final-score {
+            color: #f0c040;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+        .overlay-box .time {
+            font-size: 16px;
+            color: #8fca8f;
+            margin-bottom: 12px;
+        }
+        .overlay-btn {
+            background: #2a4a3a;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 28px;
+            color: #8fca8f;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #142a1a;
+            transition: all 0.08s;
+            touch-action: manipulation;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            width: 100%;
+            max-width: 200px;
+        }
+        .overlay-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #142a1a;
         }
         .shop-panel {
             background: #1e2a1e;
@@ -304,7 +324,7 @@
             padding: 16px 18px 20px 18px;
             max-width: 480px;
             width: 100%;
-            max-height: 85%;
+            max-height: 80vh;
             overflow-y: auto;
             border: 2px solid #3a6a3a;
             box-shadow: 0 0 60px rgba(0, 40, 0, 0.6);
@@ -326,7 +346,6 @@
             text-align: center;
             margin-bottom: 8px;
             letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(80, 200, 80, 0.2);
             border-bottom: 2px solid #2a4a2a;
             padding-bottom: 8px;
             display: flex;
@@ -347,13 +366,12 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(0, 0, 0, 0.4);
-            padding: 5px 10px 5px 10px;
+            padding: 5px 10px;
             border-radius: 8px;
             border: 1px solid #2a4a2a;
-            transition: all 0.15s;
-            cursor: default;
             gap: 4px;
             flex-wrap: wrap;
+            cursor: default;
         }
         .shop-item.owned {
             border-color: #4a7a4a;
@@ -448,141 +466,37 @@
             transform: translateY(4px);
             box-shadow: 0 0px 0 #2a1212;
         }
-        .gameover-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(2px);
-            border-radius: 28px;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 15;
-            padding: 16px;
-        }
-        .gameover-overlay.active {
-            display: flex;
-        }
-        .gameover-box {
-            background: #1a1a2a;
-            border-radius: 20px;
-            padding: 24px 30px;
-            text-align: center;
-            border: 2px solid #6a2a2a;
-            box-shadow: 0 0 60px rgba(100, 0, 0, 0.3);
-        }
-        .gameover-box h1 {
-            color: #ff6666;
-            font-size: 24px;
-            letter-spacing: 4px;
-            margin-bottom: 4px;
-        }
-        .gameover-box .sub {
-            color: #8a8aaa;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-        .gameover-box .final-score {
-            color: #f0c040;
-            font-size: 18px;
-            margin-bottom: 12px;
-        }
-        .gameover-box .restart-btn {
-            background: #3a4a3a;
-            border: none;
-            border-radius: 12px;
-            padding: 8px 32px;
-            color: #b0f0b0;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #1a2a1a;
-            transition: all 0.08s;
-            touch-action: manipulation;
-        }
-        .gameover-box .restart-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #1a2a1a;
-        }
-        .pause-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(2px);
-            border-radius: 28px;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 12;
-        }
-        .pause-overlay.active {
-            display: flex;
-        }
-        .pause-box {
-            color: #b0f0b0;
-            font-size: 28px;
-            letter-spacing: 6px;
-            text-shadow: 0 0 40px rgba(80, 200, 80, 0.3);
-            background: rgba(0, 0, 0, 0.5);
-            padding: 16px 32px;
-            border-radius: 20px;
-            border: 2px solid #3a6a3a;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-        .pause-box .time {
-            font-size: 16px;
-            color: #8fca8f;
-        }
-        .pause-box .resume-btn {
-            background: #2a4a3a;
-            border: none;
-            border-radius: 12px;
-            padding: 8px 28px;
-            color: #8fca8f;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #142a1a;
-            transition: all 0.08s;
-            touch-action: manipulation;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-        .pause-box .resume-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #142a1a;
-        }
 
-        /* ─── Адаптив ───────────────────────────────────────────────── */
+        /* Адаптация под маленькие экраны */
         @media (max-width: 500px) {
-            .pda {
-                padding: 8px 8px 12px 8px;
-                border-radius: 20px;
+            .ctrl-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 17px;
+                border-radius: 10px;
             }
-            .screen-wrapper {
-                padding: 5px;
+            .ctrl-btn.fire {
+                width: 56px;
             }
-            .hud {
-                font-size: 8px;
-                padding: 2px 6px 4px 6px;
-                gap: 2px 4px;
+            .ctrl-btn.barrel {
+                width: 44px;
+                font-size: 15px;
             }
-            .hud-item {
-                padding: 1px 4px;
-                border-radius: 8px;
+            .ctrl-btn.fullscreen-btn {
+                font-size: 20px;
+            }
+            .dpad {
+                grid-template-columns: 48px 48px 48px;
+                grid-template-rows: 48px 48px 48px;
+                gap: 3px;
+            }
+            .dpad .ctrl-btn {
+                font-size: 20px;
+            }
+            #hud {
+                font-size: 10px;
+                padding: 2px 6px;
+                min-height: 28px;
             }
             .hud-item .value {
                 font-size: 10px;
@@ -592,209 +506,168 @@
                 font-size: 7px;
             }
             .hud-tank {
-                font-size: 8px;
+                font-size: 9px;
                 padding: 1px 5px;
             }
-            .dpad {
-                grid-template-columns: 44px 44px 44px;
-                grid-template-rows: 44px 44px 44px;
-                gap: 3px;
-            }
-            .dpad .ctrl-btn {
-                font-size: 18px;
-                border-radius: 8px;
-            }
-            .ctrl-btn {
-                padding: 6px 10px;
-                font-size: 15px;
-                min-width: 42px;
-                min-height: 42px;
-                border-radius: 10px;
-            }
-            .ctrl-btn.fire {
-                min-width: 48px;
-                font-size: 16px;
-            }
-            .ctrl-btn.shop-btn {
-                font-size: 14px;
-                padding: 6px 10px;
-                min-width: 42px;
-            }
-            .ctrl-btn.pause-btn {
-                font-size: 14px;
-                min-width: 42px;
-            }
-            .ctrl-btn.barrel {
-                font-size: 14px;
-                padding: 6px 8px;
-                min-width: 38px;
-            }
-            .ctrl-btn.restart-btn {
-                font-size: 14px;
-                padding: 6px 10px;
-                min-width: 42px;
-            }
-            .shop-panel {
-                padding: 10px 12px 14px 12px;
-            }
-            .shop-title {
-                font-size: 15px;
-            }
-            .shop-item .s-name {
-                font-size: 10px;
-                min-width: 36px;
-            }
-            .shop-item .s-stats {
-                font-size: 7px;
-                gap: 2px;
-            }
-            .shop-item .s-price {
-                font-size: 10px;
-                min-width: 30px;
-            }
-            .shop-item .s-action {
-                font-size: 9px;
-                padding: 2px 8px;
-            }
-            .gameover-box {
-                padding: 16px 20px;
-            }
-            .gameover-box h1 {
-                font-size: 18px;
-            }
-            .pause-box {
-                font-size: 20px;
-                padding: 12px 20px;
-                gap: 8px;
-            }
-            .pause-box .time {
-                font-size: 14px;
-            }
-            .pause-box .resume-btn {
-                font-size: 14px;
-                padding: 6px 20px;
+            #controls {
+                padding: 4px 4px 10px 4px;
+                gap: 4px;
             }
         }
-        @media (max-width: 380px) {
+        @media (max-width: 400px) {
+            .ctrl-btn {
+                width: 42px;
+                height: 42px;
+                font-size: 15px;
+            }
+            .ctrl-btn.fire {
+                width: 48px;
+            }
+            .ctrl-btn.barrel {
+                width: 38px;
+                font-size: 13px;
+            }
+            .ctrl-btn.fullscreen-btn {
+                font-size: 17px;
+            }
             .dpad {
-                grid-template-columns: 38px 38px 38px;
-                grid-template-rows: 38px 38px 38px;
+                grid-template-columns: 42px 42px 42px;
+                grid-template-rows: 42px 42px 42px;
                 gap: 2px;
             }
             .dpad .ctrl-btn {
-                font-size: 15px;
-                border-radius: 6px;
+                font-size: 17px;
             }
-            .ctrl-btn {
-                padding: 4px 6px;
-                font-size: 12px;
-                min-width: 34px;
-                min-height: 34px;
-                border-radius: 8px;
-            }
-            .ctrl-btn.fire {
-                min-width: 40px;
-                font-size: 14px;
-            }
-            .ctrl-btn.shop-btn {
-                font-size: 12px;
-                padding: 4px 8px;
-                min-width: 34px;
-            }
-            .ctrl-btn.pause-btn {
-                font-size: 12px;
-                min-width: 34px;
-            }
-            .ctrl-btn.barrel {
-                font-size: 12px;
-                padding: 4px 6px;
-                min-width: 30px;
-            }
-            .ctrl-btn.restart-btn {
-                font-size: 12px;
-                padding: 4px 8px;
-                min-width: 34px;
-            }
-            .hud {
-                font-size: 7px;
-                gap: 1px 2px;
+            #hud {
+                font-size: 8px;
+                padding: 2px 4px;
+                min-height: 24px;
             }
             .hud-item {
-                padding: 0px 3px;
+                padding: 0px 4px;
             }
             .hud-item .value {
                 font-size: 8px;
                 min-width: 10px;
             }
-            .shop-item .s-name {
-                font-size: 9px;
-                min-width: 28px;
-            }
-            .shop-item .s-stats {
-                font-size: 6px;
-            }
-            .shop-item .s-price {
-                font-size: 8px;
-                min-width: 24px;
-            }
-            .shop-item .s-action {
+            .hud-tank {
                 font-size: 7px;
-                padding: 1px 6px;
             }
-            .pause-box {
-                font-size: 16px;
-                padding: 10px 16px;
+            #controls {
+                padding: 2px 2px 8px 2px;
+                gap: 2px;
             }
-            .pause-box .resume-btn {
+        }
+        @media (orientation: landscape) and (max-height: 450px) {
+            #hud {
+                font-size: 8px;
+                min-height: 22px;
+                padding: 1px 4px;
+            }
+            #controls {
+                padding: 2px 4px 6px 4px;
+            }
+            .ctrl-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 13px;
+            }
+            .ctrl-btn.fire {
+                width: 46px;
+            }
+            .ctrl-btn.barrel {
+                width: 36px;
                 font-size: 12px;
-                padding: 5px 16px;
+            }
+            .ctrl-btn.fullscreen-btn {
+                font-size: 16px;
+            }
+            .dpad {
+                grid-template-columns: 40px 40px 40px;
+                grid-template-rows: 40px 40px 40px;
+                gap: 2px;
+            }
+            .dpad .ctrl-btn {
+                font-size: 16px;
+            }
+        }
+        /* Дополнительные отступы для очень узких экранов */
+        @media (max-width: 340px) {
+            .ctrl-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 12px;
+            }
+            .ctrl-btn.fire {
+                width: 40px;
+            }
+            .ctrl-btn.barrel {
+                width: 32px;
+                font-size: 11px;
+            }
+            .ctrl-btn.fullscreen-btn {
+                font-size: 14px;
+            }
+            .dpad {
+                grid-template-columns: 36px 36px 36px;
+                grid-template-rows: 36px 36px 36px;
+                gap: 2px;
+            }
+            .dpad .ctrl-btn {
+                font-size: 14px;
+            }
+            #controls {
+                padding: 2px 2px 6px 2px;
+                gap: 2px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="pda" id="pda">
-        <div class="screen-wrapper">
-            <div class="screen">
-                <div class="hud" id="hud">
-                    <div class="hud-item">
-                        <span class="icon">⭐</span>
-                        <span class="label">Счёт</span>
-                        <span class="value" id="scoreDisplay">0</span>
-                    </div>
-                    <div class="hud-item">
-                        <span class="icon">💰</span>
-                        <span class="label">Деньги</span>
-                        <span class="value" id="moneyDisplay">0</span>
-                    </div>
-                    <div class="hud-tank">
-                        <span>🚀</span>
-                        <span class="tname" id="tankNameDisplay">Т-26</span>
-                        <span style="color:#6a9a6a;font-size:9px;" id="tankHealthDisplay">❤️ 3/3</span>
-                    </div>
-                    <div class="hud-item">
-                        <span class="icon">🎯</span>
-                        <span class="label">Ур.</span>
-                        <span class="value" id="levelDisplay">1</span>
-                    </div>
-                    <div class="hud-item">
-                        <span class="icon">⏱️</span>
-                        <span class="label">Время</span>
-                        <span class="value" id="timeDisplay">00:00</span>
-                    </div>
-                    <div class="hud-item" id="bossHud" style="display:none; border-color:#cc4444;">
-                        <span class="icon">👹</span>
-                        <span class="label">БОСС</span>
-                        <span class="value" id="bossHpDisplay">1000</span>
-                    </div>
-                </div>
-                <canvas id="gameCanvas" width="600" height="340"></canvas>
+    <div id="gameContainer">
+        <!-- HUD -->
+        <div id="hud">
+            <div class="hud-item">
+                <span class="icon">⭐</span>
+                <span class="label">Счёт</span>
+                <span class="value" id="scoreDisplay">0</span>
+            </div>
+            <div class="hud-item">
+                <span class="icon">💰</span>
+                <span class="label">Деньги</span>
+                <span class="value" id="moneyDisplay">0</span>
+            </div>
+            <div class="hud-tank">
+                <span>🚀</span>
+                <span class="tname" id="tankNameDisplay">Т-26</span>
+                <span style="color:#6a9a6a;font-size:9px;" id="tankHealthDisplay">❤️ 3/3</span>
+            </div>
+            <div class="hud-item">
+                <span class="icon">🎯</span>
+                <span class="label">Ур.</span>
+                <span class="value" id="levelDisplay">1</span>
+            </div>
+            <div class="hud-item">
+                <span class="icon">⏱️</span>
+                <span class="label">Время</span>
+                <span class="value" id="timeDisplay">00:00</span>
+            </div>
+            <div class="hud-item" id="bossHud" style="display:none; border-color:#cc4444;">
+                <span class="icon">👹</span>
+                <span class="label">БОСС</span>
+                <span class="value" id="bossHpDisplay">1000</span>
             </div>
         </div>
 
-        <div class="controls">
-            <!-- D-Pad (крестовина) — слева -->
-            <div class="ctrl-group dpad-group">
+        <!-- Canvas -->
+        <div id="canvasWrapper">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <!-- Управление -->
+        <div id="controls">
+            <!-- D-Pad слева -->
+            <div class="ctrl-group">
                 <div class="dpad">
                     <button class="ctrl-btn" id="btnUp">▲</button>
                     <button class="ctrl-btn" id="btnLeft">◀</button>
@@ -804,14 +677,15 @@
                 </div>
             </div>
 
-            <!-- Пауза, магазин, рестарт — по центру -->
+            <!-- Центр: пауза, магазин, рестарт, полноэкран -->
             <div class="ctrl-group">
                 <button class="ctrl-btn pause-btn" id="btnPause">⏸️</button>
                 <button class="ctrl-btn shop-btn" id="btnShop">🏪</button>
                 <button class="ctrl-btn restart-btn" id="btnRestart">🔄</button>
+                <button class="ctrl-btn fullscreen-btn" id="btnFullscreen">⛶</button>
             </div>
 
-            <!-- Кнопки наклона пушки и выстрела — справа -->
+            <!-- Справа: наклон пушки и огонь -->
             <div class="ctrl-group">
                 <button class="ctrl-btn barrel" id="btnBarrelUp">↗</button>
                 <button class="ctrl-btn barrel" id="btnBarrelDown">↘</button>
@@ -819,7 +693,8 @@
             </div>
         </div>
 
-        <div class="shop-overlay" id="shopOverlay">
+        <!-- Оверлеи -->
+        <div class="overlay" id="shopOverlay">
             <div class="shop-panel">
                 <div class="shop-title">
                     <span>🏪 МАГАЗИН ТАНКОВ</span>
@@ -830,20 +705,20 @@
             </div>
         </div>
 
-        <div class="pause-overlay" id="pauseOverlay">
-            <div class="pause-box">
-                ⏸ ПАУЗА
+        <div class="overlay" id="pauseOverlay">
+            <div class="overlay-box">
+                <h1 style="color:#b0f0b0;font-size:28px;">⏸ ПАУЗА</h1>
                 <div class="time" id="pauseTime">00:00</div>
-                <button class="resume-btn" id="resumeBtn">▶ ПРОДОЛЖИТЬ</button>
+                <button class="overlay-btn" id="resumeBtn">▶ ПРОДОЛЖИТЬ</button>
             </div>
         </div>
 
-        <div class="gameover-overlay" id="gameoverOverlay">
-            <div class="gameover-box">
+        <div class="overlay" id="gameoverOverlay">
+            <div class="overlay-box">
                 <h1>☠️ ПОДБИТ</h1>
                 <div class="sub">Ваш танк уничтожен</div>
                 <div class="final-score">⭐ Счёт: <span id="finalScore">0</span></div>
-                <button class="restart-btn" id="restartBtn">🔄 НОВЫЙ БОЙ</button>
+                <button class="overlay-btn" id="restartBtn">🔄 НОВЫЙ БОЙ</button>
             </div>
         </div>
     </div>
@@ -851,6 +726,48 @@
     <script>
         (function() {
             'use strict';
+
+            // ─── FULLSCREEN TOGGLE ─────────────────────────────────────
+            const fullscreenBtn = document.getElementById('btnFullscreen');
+            const container = document.getElementById('gameContainer');
+
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    if (container.requestFullscreen) {
+                        container.requestFullscreen().catch(err => {
+                            console.warn('Fullscreen not supported');
+                        });
+                    } else if (container.webkitRequestFullscreen) {
+                        container.webkitRequestFullscreen();
+                    } else if (container.msRequestFullscreen) {
+                        container.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                }
+            }
+
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+            // Обновляем иконку при изменении состояния полноэкранного режима
+            function updateFullscreenIcon() {
+                if (document.fullscreenElement) {
+                    fullscreenBtn.textContent = '⛶'; 
+                } else {
+                    fullscreenBtn.textContent = '⛶';
+                }
+            }
+
+            document.addEventListener('fullscreenchange', updateFullscreenIcon);
+            document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+            document.addEventListener('mozfullscreenchange', updateFullscreenIcon);
+            document.addEventListener('MSFullscreenChange', updateFullscreenIcon);
 
             // ─── ICON: РИСУЕМ ТАНК ДЛЯ FAVICON ──────────────────────
             function setTankFavicon() {
@@ -892,8 +809,36 @@
             // ─── CANVAS ───────────────────────────────────────────────────
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
-            const W = 600,
-                H = 340;
+            const wrapper = document.getElementById('canvasWrapper');
+
+            // Фиксированные размеры игры для логики
+            const GAME_W = 600;
+            const GAME_H = 340;
+            let scale = 1;
+
+            function resizeCanvas() {
+                const rect = wrapper.getBoundingClientRect();
+                const w = rect.width;
+                const h = rect.height;
+                const ratio = GAME_W / GAME_H;
+                let displayW = w;
+                let displayH = w / ratio;
+                if (displayH > h) {
+                    displayH = h;
+                    displayW = h * ratio;
+                }
+                canvas.width = GAME_W;
+                canvas.height = GAME_H;
+                canvas.style.width = displayW + 'px';
+                canvas.style.height = displayH + 'px';
+                canvas.style.position = 'absolute';
+                canvas.style.left = (w - displayW) / 2 + 'px';
+                canvas.style.top = (h - displayH) / 2 + 'px';
+                scale = displayW / GAME_W;
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
 
             // ─── DOM ЭЛЕМЕНТЫ ──────────────────────────────────────────
             const scoreDisplay = document.getElementById('scoreDisplay');
@@ -990,7 +935,7 @@
                     let y = 10 + Math.random() * 80;
                     let w = 25 + Math.random() * 40;
                     let h = 30 + Math.random() * 50;
-                    if (x + w > W) break;
+                    if (x + w > GAME_W) break;
                     state.buildings.push({
                         x: x,
                         y: y,
@@ -1003,8 +948,8 @@
                 }
                 state.roadPoints = [];
                 for (let i = 0; i <= 20; i++) {
-                    let x = i * (W / 20);
-                    let y = H - 20 + Math.sin(i * 0.5) * 4 + Math.sin(i * 1.3 + 1) * 3;
+                    let x = i * (GAME_W / 20);
+                    let y = GAME_H - 20 + Math.sin(i * 0.5) * 4 + Math.sin(i * 1.3 + 1) * 3;
                     state.roadPoints.push({ x, y });
                 }
             }
@@ -1059,7 +1004,7 @@
                 }
 
                 let health, speed, color, turretColor, trackColor, damage, bulletSpeed, fireRate, w, h, reward;
-                const enemyDamage = 1;
+                const enemyDamage = 1; 
 
                 if (enemyType === 'light') {
                     health = 1;
@@ -1100,8 +1045,8 @@
                 }
 
                 const enemy = {
-                    x: W + 10,
-                    y: 50 + rand(0, H - 80 - h),
+                    x: GAME_W + 10,
+                    y: 50 + rand(0, GAME_H - 80 - h),
                     w: w,
                     h: h,
                     health: Math.max(1, health),
@@ -1120,7 +1065,7 @@
                     trackOffset: rand(0, 100),
                     shootTimer: 0,
                     moveTimer: 0,
-                    yTarget: 50 + rand(0, H - 80 - h)
+                    yTarget: 50 + rand(0, GAME_H - 80 - h)
                 };
                 state.enemies.push(enemy);
             }
@@ -1130,8 +1075,8 @@
                 if (state.bossSpawned || state.gameOver) return;
                 state.bossSpawned = true;
                 state.boss = {
-                    x: W + 20,
-                    y: H / 2 - 30,
+                    x: GAME_W + 20,
+                    y: GAME_H / 2 - 30,
                     w: 64,
                     h: 44,
                     health: 1000,
@@ -1464,8 +1409,8 @@
                 if (keys.down) dy = p.speed * 0.7;
 
                 if (dx !== 0) p.trackOffset += 0.3;
-                p.x = clamp(p.x + dx, 10, W - p.w - 10);
-                p.y = clamp(p.y + dy, 30, H - p.h - 10);
+                p.x = clamp(p.x + dx, 10, GAME_W - p.w - 10);
+                p.y = clamp(p.y + dy, 30, GAME_H - p.h - 10);
 
                 if (keys.barrelUp) {
                     p.barrelAngle = Math.max(-0.6, p.barrelAngle - 0.04);
@@ -1483,7 +1428,7 @@
                     b.y += b.vy;
                     b.trail.push({ x: b.x, y: b.y });
                     if (b.trail.length > 6) b.trail.shift();
-                    if (b.x > W + 20 || b.x < -20 || b.y < -20 || b.y > H + 20) {
+                    if (b.x > GAME_W + 20 || b.x < -20 || b.y < -20 || b.y > GAME_H + 20) {
                         state.bullets.splice(i, 1);
                         continue;
                     }
@@ -1529,7 +1474,7 @@
                     b.y += b.vy;
                     b.trail.push({ x: b.x, y: b.y });
                     if (b.trail.length > 5) b.trail.shift();
-                    if (b.x < -20 || b.x > W + 20 || b.y < -20 || b.y > H + 20) {
+                    if (b.x < -20 || b.x > GAME_W + 20 || b.y < -20 || b.y > GAME_H + 20) {
                         state.enemyBullets.splice(i, 1);
                         continue;
                     }
@@ -1570,7 +1515,7 @@
                     if (Math.abs(dy2) > 6) {
                         enemy.y += Math.sign(dy2) * Math.min(Math.abs(dy2) * 0.025, moveSpeed);
                     }
-                    enemy.y = clamp(enemy.y, 30, H - enemy.h - 10);
+                    enemy.y = clamp(enemy.y, 30, GAME_H - enemy.h - 10);
 
                     enemy.x -= enemy.speed * 0.25;
 
@@ -1614,7 +1559,7 @@
                     if (Math.abs(dyBoss) > 5) {
                         boss.y += Math.sign(dyBoss) * Math.min(Math.abs(dyBoss) * 0.02, moveSpeedBoss);
                     }
-                    boss.y = clamp(boss.y, 30, H - boss.h - 10);
+                    boss.y = clamp(boss.y, 30, GAME_H - boss.h - 10);
                     boss.x -= boss.speed * 0.2;
 
                     if (boss.fireCooldown > 0) boss.fireCooldown--;
@@ -1813,14 +1758,14 @@
 
             // ─── ОТРИСОВКА ────────────────────────────────────────────
             function draw() {
-                ctx.clearRect(0, 0, W, H);
+                ctx.clearRect(0, 0, GAME_W, GAME_H);
 
-                const grad = ctx.createLinearGradient(0, 0, 0, H);
+                const grad = ctx.createLinearGradient(0, 0, 0, GAME_H);
                 grad.addColorStop(0, '#1a2a3a');
                 grad.addColorStop(0.5, '#2a3a2a');
                 grad.addColorStop(1, '#1a2a1a');
                 ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, W, H);
+                ctx.fillRect(0, 0, GAME_W, GAME_H);
 
                 for (const bld of state.buildings) {
                     ctx.fillStyle = bld.color;
@@ -1852,13 +1797,13 @@
 
                 ctx.shadowBlur = 0;
                 ctx.beginPath();
-                ctx.moveTo(0, H - 20);
+                ctx.moveTo(0, GAME_H - 20);
                 for (const pt of state.roadPoints) {
                     ctx.lineTo(pt.x, pt.y);
                 }
-                ctx.lineTo(W, H - 20);
-                ctx.lineTo(W, H);
-                ctx.lineTo(0, H);
+                ctx.lineTo(GAME_W, GAME_H - 20);
+                ctx.lineTo(GAME_W, GAME_H);
+                ctx.lineTo(0, GAME_H);
                 ctx.closePath();
                 ctx.fillStyle = '#2a3a2a';
                 ctx.fill();
@@ -2051,9 +1996,10 @@
                 ctx.font = '10px monospace';
                 ctx.textAlign = 'right';
                 ctx.textBaseline = 'bottom';
-                ctx.fillText('врагов: ' + state.enemies.filter(e => e.alive).length + '/' + state.maxEnemies, W - 8, H - 4);
+                ctx.fillText('врагов: ' + state.enemies.filter(e => e.alive).length + '/' + state.maxEnemies, GAME_W - 8,
+                    GAME_H - 4);
                 ctx.textAlign = 'left';
-                ctx.fillText('убито: ' + state.enemiesKilled + '/60', 8, H - 4);
+                ctx.fillText('убито: ' + state.enemiesKilled + '/60', 8, GAME_H - 4);
 
                 if (p.alive) {
                     ctx.fillStyle = 'rgba(200,200,200,0.4)';
@@ -2066,15 +2012,15 @@
 
                 if (state.paused) {
                     ctx.fillStyle = 'rgba(0,0,0,0.3)';
-                    ctx.fillRect(0, 0, W, H);
+                    ctx.fillRect(0, 0, GAME_W, GAME_H);
                     ctx.fillStyle = '#b0f0b0';
                     ctx.font = '24px monospace';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText('⏸ ПАУЗА', W / 2, H / 2 - 10);
+                    ctx.fillText('⏸ ПАУЗА', GAME_W / 2, GAME_H / 2 - 10);
                     ctx.fillStyle = '#8fca8f';
                     ctx.font = '14px monospace';
-                    ctx.fillText('нажмите кнопку на экране', W / 2, H / 2 + 30);
+                    ctx.fillText('нажмите кнопку на экране', GAME_W / 2, GAME_H / 2 + 30);
                 }
             }
 
