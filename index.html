@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Танки СССР</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎖️</text></svg>" />
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJzaG9ydF9uYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJkZXNjcmlwdGlvbiI6ICLQmNCz0YDQsCDQsiDRgdGC0LjQu9C1IFBEQSDQvdCwINGB0L7QstC10YLRgdC60LjRhCDRgtCw0L3QutCw0YUiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhMWEyZSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTFhMmUiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdib3g9JzAgMCA2NCA2NCc+PHJlY3Qgd2lkdGg9JzY0JyBoZWlnaHQ9JzY0JyBmaWxsPScjMWEyYTFhJy8+PCEtLSB0YW5rIC0tPjxwYXRoIGQ9J00xMCAzMGg0NHYxOGgtNDR6JyBmaWxsPScjNGE3YTNhJy8+PHBhdGggZD0nTTIyIDIwaDIwdjE0aC0yMHonIGZpbGw9JyM1YThhNGEnLz48cGF0aCBkPSdNMzggMjRoMjB2NGgtMjB6JyBmaWxsPScjMmEyYTJhJy8+PHBhdGggZD0nTTU0IDIyaDZ2OGgtNnonIGZpbGw9JyMyYTJhMmEnLz48cGF0aCBkPSdNOCA0NGg0OHYxMGgtNDh6JyBmaWxsPScjMmEzYTJhJy8+PHBhdGggZD0nTTE0IDQ5YTEwIDEwIDAgMCAwIDAtMjB6JyBmaWxsPScjMWEyYTFhJy8+PHBhdGggZD0nTTI2IDQ5YTEwIDEwIDAgMCAwIDAtMjB6JyBmaWxsPScjMWEyYTFhJy8+PHBhdGggZD0nTTM4IDQ5YTEwIDEwIDAgMCAwIDAtMjB6JyBmaWxsPScjMWEyYTFhJy8+PHBhdGggZD0nTTUwIDQ5YTEwIDEwIDAgMCAwIDAtMjB6JyBmaWxsPScjMWEyYTFhJy8+PHRleHQgeD0nMzInIHk9JzI3JyBmb250LXNpemU9JzE2JyB0ZXh0LWFuY2hvcj0nY2VudGVyJyBmaWxsPScjY2MyMjIyJz7iiKU8L3RleHQ+PC9zdmc+IgogICAgfQogIF0KfQ==" />
     <style>
+        /* ─── RESET & BASE ───────────────────────────────────────────── */
         * {
             margin: 0;
             padding: 0;
@@ -38,6 +40,38 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+        }
+
+        /* ─── INSTALL BUTTON ──────────────────────────────────────────── */
+        #installContainer {
+            display: none;
+            padding: 4px 6px 2px 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid #3a5a3a;
+            text-align: center;
+        }
+        #installContainer.show {
+            display: block;
+        }
+        .install-btn-header {
+            background: #2a4a3a;
+            border: none;
+            border-radius: 8px;
+            padding: 4px 16px;
+            color: #b0f0b0;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #142a1a;
+            transition: all 0.08s;
+            touch-action: manipulation;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+        .install-btn-header:active {
+            transform: translateY(3px);
+            box-shadow: 0 0px 0 #142a1a;
         }
 
         #hud {
@@ -436,6 +470,7 @@
             .shop-item .s-stats { font-size: 6px; }
             .shop-item .s-price { font-size: 10px; min-width: 28px; }
             .shop-item .s-action { font-size: 8px; padding: 1px 8px; }
+            .install-btn-header { font-size: 10px; padding: 3px 12px; }
         }
         @media (max-width: 400px) {
             .ctrl-btn {
@@ -487,11 +522,21 @@
                 gap: 2px;
             }
             .dpad .ctrl-btn { font-size: 13px; }
+            .install-btn-header { font-size: 9px; padding: 2px 10px; }
+        }
+        /* Скрываем кнопку установки в PWA-режиме */
+        @media (display-mode: standalone) {
+            #installContainer { display: none !important; }
         }
     </style>
 </head>
 <body>
     <div id="gameContainer">
+        <!-- Кнопка установки -->
+        <div id="installContainer">
+            <button class="install-btn-header" id="installBtn">📲 УСТАНОВИТЬ ИГРУ</button>
+        </div>
+
         <!-- HUD -->
         <div id="hud">
             <div class="hud-item">
@@ -587,6 +632,41 @@
         (function() {
             'use strict';
 
+            // ─── PWA INSTALL ────────────────────────────────────────────
+            let deferredPrompt = null;
+            const installContainer = document.getElementById('installContainer');
+            const installBtn = document.getElementById('installBtn');
+
+            // Проверяем, установлено ли уже приложение
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                window.navigator.standalone === true;
+
+            // Показываем баннер только если не в standalone режиме и доступна установка
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (!isStandalone) {
+                    installContainer.classList.add('show');
+                }
+            });
+
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const result = await deferredPrompt.userChoice;
+                    if (result.outcome === 'accepted') {
+                        installContainer.classList.remove('show');
+                    }
+                    deferredPrompt = null;
+                }
+            });
+
+            // Скрываем баннер после установки
+            window.addEventListener('appinstalled', () => {
+                installContainer.classList.remove('show');
+            });
+
+            // ─── FULLSCREEN TOGGLE ─────────────────────────────────────
             const fullscreenBtn = document.getElementById('btnFullscreen');
             const container = document.getElementById('gameContainer');
 
@@ -611,6 +691,7 @@
             }
             fullscreenBtn.addEventListener('click', toggleFullscreen);
 
+            // ─── CANVAS ───────────────────────────────────────────────────
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
             const wrapper = document.getElementById('canvasWrapper');
@@ -640,6 +721,7 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
 
+            // ─── DOM ЭЛЕМЕНТЫ ──────────────────────────────────────────
             const scoreDisplay = document.getElementById('scoreDisplay');
             const moneyDisplay = document.getElementById('moneyDisplay');
             const tankNameDisplay = document.getElementById('tankNameDisplay');
@@ -656,6 +738,7 @@
             const bossHud = document.getElementById('bossHud');
             const bossHpDisplay = document.getElementById('bossHpDisplay');
 
+            // ─── ОПРЕДЕЛЕНИЯ ТАНКОВ ────────────────────────────────────
             const TANK_DEFS = {
                 't26': { id: 't26', name: 'Т-26', cost: 0, speed: 2.2, fireRate: 30, damage: 1, health: 3,
                     bulletSpeed: 4.2, color: '#5a7a3a', trackColor: '#3a4a2a', turretColor: '#6a8a4a', star: true },
@@ -673,6 +756,7 @@
                     bulletSpeed: 5.6, color: '#4a6a5a', trackColor: '#2a4a3a', turretColor: '#5a7a6a', star: true }
             };
 
+            // ─── СОСТОЯНИЕ ИГРЫ ──────────────────────────────────────
             const state = {
                 player: {
                     x: 55,
@@ -717,6 +801,7 @@
                 roadPoints: []
             };
 
+            // ─── ГЕНЕРАЦИЯ КАРТЫ ──────────────────────────────────────
             function generateMap() {
                 state.buildings = [];
                 for (let i = 0; i < 6; i++) {
@@ -743,6 +828,7 @@
             }
             generateMap();
 
+            // ─── ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ──────────────────────────────
             function rand(min, max) { return Math.random() * (max - min) + min; }
 
             function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
@@ -753,6 +839,7 @@
 
             function getPlayerTankDef() { return getTankDef(state.currentTankId); }
 
+            // ─── ОБНОВИТЬ HUD ──────────────────────────────────────────
             function updateHUD() {
                 const def = getPlayerTankDef();
                 scoreDisplay.textContent = state.score;
@@ -776,6 +863,7 @@
                 }
             }
 
+            // ─── СПАВН ВРАГА ──────────────────────────────────────────
             function spawnEnemy() {
                 if (state.enemies.length >= state.maxEnemies || state.gameOver || state.paused) return;
 
@@ -842,6 +930,7 @@
                 });
             }
 
+            // ─── СПАВН БОССА ──────────────────────────────────────────
             function spawnBoss() {
                 if (state.bossSpawned || state.gameOver) return;
                 state.bossSpawned = true;
@@ -881,6 +970,7 @@
                 updateHUD();
             }
 
+            // ─── ВЫСТРЕЛ ИГРОКА ──────────────────────────────────────
             function playerShoot() {
                 if (state.gameOver || state.paused) return;
                 const p = state.player;
@@ -908,6 +998,7 @@
                 });
             }
 
+            // ─── ВЫСТРЕЛ ВРАГА ──────────────────────────────────────
             function enemyShoot(enemy) {
                 if (enemy.fireCooldown > 0 || !enemy.alive) return;
                 const p = state.player;
@@ -926,6 +1017,7 @@
                 });
             }
 
+            // ─── ВЗРЫВ ────────────────────────────────────────────────
             function createExplosion(x, y, size, color) {
                 const count = Math.min(5 + randInt(0, 4), 8);
                 for (let i = 0; i < count; i++) {
@@ -946,6 +1038,7 @@
                 }
             }
 
+            // ─── УНИЧТОЖЕНИЕ ВРАГА ──────────────────────────────────
             function destroyEnemy(enemy) {
                 if (!enemy.alive) return;
                 enemy.alive = false;
@@ -969,6 +1062,7 @@
                 updateHUD();
             }
 
+            // ─── УНИЧТОЖЕНИЕ БОССА ──────────────────────────────────
             function destroyBoss() {
                 const boss = state.boss;
                 if (!boss || !boss.alive) return;
@@ -1005,6 +1099,7 @@
                 updateHUD();
             }
 
+            // ─── СБРОС ИГРЫ ──────────────────────────────────────────
             function resetGame() {
                 const def = getTankDef(state.currentTankId);
                 state.player.x = 55;
@@ -1062,6 +1157,7 @@
                 renderShop();
             }
 
+            // ─── ПАУЗА ──────────────────────────────────────────────────
             function togglePause() {
                 if (state.gameOver) return;
                 state.paused = !state.paused;
@@ -1078,6 +1174,7 @@
                 }
             }
 
+            // ─── КЛАВИАТУРА ─────────────────────────────────────────────
             const keys = {
                 left: false,
                 right: false,
@@ -1185,6 +1282,7 @@
                 }
             });
 
+            // ─── КНОПКИ УПРАВЛЕНИЯ ──────────────────────────────────────
             function setupButton(id, key) {
                 const btn = document.getElementById(id);
                 if (!btn) return;
@@ -1234,9 +1332,11 @@
             }, { passive: false });
             fireBtn.addEventListener('touchcancel', (e) => { keys.fire = false; }, { passive: false });
 
+            // ─── ПАУЗА (кнопки) ────────────────────────────────────────
             document.getElementById('btnPause').addEventListener('click', togglePause);
             document.getElementById('resumeBtn').addEventListener('click', resumeGame);
 
+            // ─── РЕСТАРТ (кнопка) ──────────────────────────────────────
             document.getElementById('btnRestart').addEventListener('click', function() {
                 if (state.gameOver) {
                     fullRestart();
@@ -1247,6 +1347,7 @@
                 }
             });
 
+            // ─── МАГАЗИН ──────────────────────────────────────────────
             function renderShop() {
                 const list = document.getElementById('shopList');
                 list.innerHTML = '';
@@ -1376,6 +1477,7 @@
 
             document.getElementById('restartBtn').addEventListener('click', fullRestart);
 
+            // ─── ОБНОВЛЕНИЕ ──────────────────────────────────────────
             function update() {
                 if (state.gameOver || state.paused) return;
 
@@ -1608,6 +1710,7 @@
                 updateHUD();
             }
 
+            // ─── ОТРИСОВКА ТАНКА ───────────────────────────────────────
             function drawTank(ctx, x, y, w, h, color, turretColor, trackColor, trackOffset, facing, flash, barrelAngle,
                 star) {
                 const f = facing || 1;
@@ -1719,6 +1822,7 @@
                 ctx.restore();
             }
 
+            // ─── ОТРИСОВКА ────────────────────────────────────────────
             function draw() {
                 ctx.clearRect(0, 0, GAME_W, GAME_H);
 
