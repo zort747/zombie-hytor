@@ -6,7 +6,6 @@
     <title>Танки СССР</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎖️</text></svg>" />
     <style>
-        /* ─── RESET & BASE ───────────────────────────────────────────── */
         * {
             margin: 0;
             padding: 0;
@@ -22,70 +21,75 @@
             background: #0a0a12;
             font-family: 'Courier New', monospace;
             touch-action: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* ─── GAME CONTAINER ────────────────────────────────────────── */
         #gameContainer {
-            width: 100vw;
-            height: 100vh;
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), inset 0 0 0 2px #2a2a3e, inset 0 0 0 4px #0e0e1a;
+            position: relative;
+            max-width: 580px;
+            width: 100%;
+            max-height: 98vh;
             display: flex;
             flex-direction: column;
-            background: #1a1a2e;
-            position: relative;
             overflow: hidden;
         }
 
-        /* ─── HUD ──────────────────────────────────────────────────── */
         #hud {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 8px;
-            background: rgba(0, 0, 0, 0.6);
+            padding: 3px 6px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px 10px 0 0;
             border-bottom: 2px solid #3a5a3a;
-            font-size: 11px;
+            font-size: 10px;
             color: #8fca8f;
             text-shadow: 0 0 8px rgba(80, 200, 80, 0.3);
             flex-wrap: wrap;
-            gap: 2px 6px;
-            z-index: 10;
+            gap: 2px 4px;
             flex-shrink: 0;
-            min-height: 32px;
+            min-height: 26px;
         }
         .hud-item {
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 2px;
             background: rgba(0, 0, 0, 0.3);
-            padding: 1px 7px 1px 5px;
-            border-radius: 12px;
+            padding: 1px 5px 1px 4px;
+            border-radius: 10px;
             border: 1px solid #2a4a2a;
         }
-        .hud-item .icon { font-size: 12px; opacity: 0.8; }
-        .hud-item .value { font-weight: bold; font-size: 12px; color: #b0f0b0; min-width: 18px; }
-        .hud-item .label { color: #6a9a6a; font-size: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .hud-item .icon { font-size: 10px; opacity: 0.8; }
+        .hud-item .value { font-weight: bold; font-size: 10px; color: #b0f0b0; min-width: 14px; }
+        .hud-item .label { color: #6a9a6a; font-size: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
         .hud-tank {
             background: rgba(0, 0, 0, 0.3);
-            padding: 1px 8px 1px 5px;
-            border-radius: 12px;
+            padding: 1px 6px 1px 4px;
+            border-radius: 10px;
             border: 1px solid #3a5a3a;
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-size: 10px;
+            gap: 3px;
+            font-size: 9px;
             color: #8fca8f;
         }
         .hud-tank .tname { color: #c0f0c0; font-weight: bold; }
         #bossHud { border-color: #cc4444; display: none; }
         #bossHud .value { color: #ff6666; }
 
-        /* ─── CANVAS ────────────────────────────────────────────────── */
         #canvasWrapper {
             flex: 1;
             position: relative;
             overflow: hidden;
             background: #0a0a12;
             min-height: 0;
+            border-radius: 4px;
         }
         #gameCanvas {
             display: block;
@@ -97,43 +101,42 @@
             touch-action: none;
             cursor: none;
             background: #1a2a1a;
+            border-radius: 4px;
         }
 
-        /* ─── CONTROLS ───────────────────────────────────────────────── */
         #controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 10px 14px 10px;
-            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 6px 8px 6px;
+            background: rgba(0, 0, 0, 0.5);
             border-top: 2px solid #3a5a3a;
-            gap: 8px;
+            gap: 4px;
             flex-shrink: 0;
             flex-wrap: nowrap;
-            z-index: 10;
+            border-radius: 0 0 10px 10px;
             touch-action: none;
         }
         .ctrl-group {
             display: flex;
-            gap: 8px;
+            gap: 4px;
             align-items: center;
             flex-shrink: 0;
         }
 
-        /* ─── КНОПКИ УПРАВЛЕНИЯ ─────────────────────────────────────── */
         .ctrl-btn {
             background: #3a3a52;
             border: none;
-            border-radius: 14px;
+            border-radius: 10px;
             padding: 0;
-            font-size: 20px;
+            font-size: 16px;
             color: #b0b0d0;
-            box-shadow: 0 4px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 3px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
             cursor: pointer;
             transition: all 0.06s ease;
             touch-action: manipulation;
-            width: 56px;
-            height: 56px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -145,77 +148,73 @@
             flex-shrink: 0;
         }
         .ctrl-btn:active {
-            transform: translateY(4px);
+            transform: translateY(3px);
             box-shadow: 0 0px 0 #1a1a2a;
         }
 
-        /* Кнопка выстрела — чуть больше остальных */
         .ctrl-btn.fire {
             background: #6a2a2a;
             color: #ff8888;
-            box-shadow: 0 4px 0 #3a1212, inset 0 1px 0 rgba(255, 100, 100, 0.2);
-            width: 72px;
-            height: 64px;
-            font-size: 28px;
+            box-shadow: 0 3px 0 #3a1212, inset 0 1px 0 rgba(255, 100, 100, 0.2);
+            width: 56px;
+            height: 50px;
+            font-size: 22px;
         }
-        .ctrl-btn.fire:active {
-            background: #8a3a3a;
-        }
+        .ctrl-btn.fire:active { background: #8a3a3a; }
 
         .ctrl-btn.shop-btn {
             background: #2a4a3a;
             color: #8fca8f;
-            box-shadow: 0 4px 0 #142a1a, inset 0 1px 0 rgba(100, 255, 100, 0.1);
-            font-size: 18px;
+            box-shadow: 0 3px 0 #142a1a, inset 0 1px 0 rgba(100, 255, 100, 0.1);
+            font-size: 14px;
         }
         .ctrl-btn.shop-btn:active { background: #3a5a4a; }
 
         .ctrl-btn.pause-btn {
             background: #4a3a2a;
             color: #f0d080;
-            box-shadow: 0 4px 0 #2a1a0a;
-            font-size: 18px;
+            box-shadow: 0 3px 0 #2a1a0a;
+            font-size: 14px;
         }
         .ctrl-btn.pause-btn:active { background: #5a4a3a; }
 
         .ctrl-btn.barrel {
             background: #3a3a4a;
             color: #a0b0d0;
-            box-shadow: 0 4px 0 #1a1a2a;
-            font-size: 18px;
-            width: 50px;
+            box-shadow: 0 3px 0 #1a1a2a;
+            font-size: 14px;
+            width: 38px;
         }
         .ctrl-btn.barrel:active { background: #4a4a5a; }
 
         .ctrl-btn.restart-btn {
             background: #4a2a2a;
             color: #ff8888;
-            box-shadow: 0 4px 0 #2a1212;
-            font-size: 18px;
+            box-shadow: 0 3px 0 #2a1212;
+            font-size: 14px;
         }
         .ctrl-btn.restart-btn:active { background: #5a3a3a; }
 
         .ctrl-btn.fullscreen-btn {
             background: #2a3a4a;
             color: #8fcaf0;
-            box-shadow: 0 4px 0 #1a2a3a;
-            font-size: 22px;
+            box-shadow: 0 3px 0 #1a2a3a;
+            font-size: 16px;
         }
         .ctrl-btn.fullscreen-btn:active { background: #3a4a5a; }
 
         .ctrl-btn:disabled {
             opacity: 0.4;
             transform: translateY(2px);
-            box-shadow: 0 2px 0 #1a1a2a;
+            box-shadow: 0 1px 0 #1a1a2a;
             pointer-events: none;
         }
 
-        /* ─── D-PAD ────────────────────────────────────────────────── */
         .dpad {
             display: grid;
-            grid-template-columns: 56px 56px 56px;
-            grid-template-rows: 56px 56px 56px;
-            gap: 5px;
+            grid-template-columns: 44px 44px 44px;
+            grid-template-rows: 44px 44px 44px;
+            gap: 3px;
             justify-items: center;
             align-items: center;
             flex-shrink: 0;
@@ -223,14 +222,14 @@
         .dpad .ctrl-btn {
             width: 100%;
             height: 100%;
-            border-radius: 14px;
-            font-size: 26px;
-            box-shadow: 0 4px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 20px;
+            box-shadow: 0 3px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
             background: #3a3a52;
             color: #b0b0d0;
         }
         .dpad .ctrl-btn:active {
-            transform: translateY(4px);
+            transform: translateY(3px);
             box-shadow: 0 0px 0 #1a1a2a;
         }
         #btnUp { grid-column: 2; grid-row: 1; }
@@ -246,7 +245,6 @@
             pointer-events: none;
         }
 
-        /* ─── ОВЕРЛЕИ ────────────────────────────────────────────────── */
         .overlay {
             position: absolute;
             top: 0;
@@ -260,261 +258,235 @@
             align-items: center;
             justify-content: center;
             z-index: 20;
-            padding: 20px;
+            padding: 16px;
+            border-radius: 20px;
         }
         .overlay.active { display: flex; }
         .overlay-box {
             background: #1a1a2a;
-            border-radius: 20px;
-            padding: 24px 30px;
-            max-width: 420px;
+            border-radius: 16px;
+            padding: 18px 22px;
+            max-width: 380px;
             width: 100%;
             text-align: center;
             border: 2px solid #3a6a3a;
-            box-shadow: 0 0 60px rgba(0, 40, 0, 0.4);
+            box-shadow: 0 0 40px rgba(0, 40, 0, 0.4);
             color: #b0f0b0;
         }
         .overlay-box h1 {
-            font-size: 28px;
-            letter-spacing: 4px;
-            margin-bottom: 6px;
+            font-size: 24px;
+            letter-spacing: 3px;
+            margin-bottom: 4px;
             color: #ff6666;
         }
         .overlay-box .sub {
             color: #8a8aaa;
-            font-size: 14px;
-            margin-bottom: 12px;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
         .overlay-box .final-score {
             color: #f0c040;
-            font-size: 20px;
-            margin-bottom: 16px;
+            font-size: 18px;
+            margin-bottom: 12px;
         }
         .overlay-box .time {
-            font-size: 16px;
+            font-size: 14px;
             color: #8fca8f;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .overlay-btn {
             background: #2a4a3a;
             border: none;
-            border-radius: 12px;
-            padding: 10px 28px;
+            border-radius: 10px;
+            padding: 8px 22px;
             color: #8fca8f;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
-            box-shadow: 0 4px 0 #142a1a;
+            box-shadow: 0 3px 0 #142a1a;
             transition: all 0.08s;
             touch-action: manipulation;
             letter-spacing: 1px;
-            margin-top: 8px;
+            margin-top: 6px;
             width: 100%;
-            max-width: 200px;
+            max-width: 180px;
         }
         .overlay-btn:active {
-            transform: translateY(4px);
+            transform: translateY(3px);
             box-shadow: 0 0px 0 #142a1a;
         }
 
-        /* ─── МАГАЗИН ────────────────────────────────────────────────── */
         .shop-panel {
             background: #1e2a1e;
-            border-radius: 20px;
-            padding: 16px 18px 20px 18px;
-            max-width: 480px;
+            border-radius: 16px;
+            padding: 14px 16px 16px 16px;
+            max-width: 420px;
             width: 100%;
-            max-height: 80vh;
+            max-height: 75vh;
             overflow-y: auto;
             border: 2px solid #3a6a3a;
-            box-shadow: 0 0 60px rgba(0, 40, 0, 0.6);
+            box-shadow: 0 0 40px rgba(0, 40, 0, 0.5);
         }
-        .shop-panel::-webkit-scrollbar { width: 6px; }
+        .shop-panel::-webkit-scrollbar { width: 4px; }
         .shop-panel::-webkit-scrollbar-track { background: #0a1a0a; border-radius: 4px; }
         .shop-panel::-webkit-scrollbar-thumb { background: #3a6a3a; border-radius: 4px; }
         .shop-title {
-            font-size: 18px;
+            font-size: 16px;
             color: #8fca8f;
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             letter-spacing: 2px;
             border-bottom: 2px solid #2a4a2a;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .shop-title span { font-size: 13px; color: #f0c040; }
-        .shop-list { display: flex; flex-direction: column; gap: 5px; }
+        .shop-title span { font-size: 12px; color: #f0c040; }
+        .shop-list { display: flex; flex-direction: column; gap: 4px; }
         .shop-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(0, 0, 0, 0.4);
-            padding: 5px 10px;
-            border-radius: 8px;
+            padding: 4px 8px;
+            border-radius: 6px;
             border: 1px solid #2a4a2a;
-            gap: 4px;
+            gap: 3px;
             flex-wrap: wrap;
             cursor: default;
         }
         .shop-item.owned { border-color: #4a7a4a; background: rgba(30, 60, 30, 0.3); }
-        .shop-item.current { border-color: #f0c040; background: rgba(60, 50, 20, 0.3); box-shadow: 0 0 20px rgba(240, 192, 64, 0.1); }
-        .shop-item .s-name { color: #b0e0b0; font-weight: bold; font-size: 12px; min-width: 50px; }
-        .shop-item .s-stats { color: #6a9a6a; font-size: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
-        .shop-item .s-stats span { background: rgba(0, 0, 0, 0.3); padding: 1px 4px; border-radius: 4px; }
-        .shop-item .s-price { color: #f0c040; font-weight: bold; font-size: 12px; min-width: 40px; text-align: right; }
+        .shop-item.current { border-color: #f0c040; background: rgba(60, 50, 20, 0.3); box-shadow: 0 0 16px rgba(240, 192, 64, 0.1); }
+        .shop-item .s-name { color: #b0e0b0; font-weight: bold; font-size: 11px; min-width: 40px; }
+        .shop-item .s-stats { color: #6a9a6a; font-size: 7px; display: flex; gap: 3px; flex-wrap: wrap; }
+        .shop-item .s-stats span { background: rgba(0, 0, 0, 0.3); padding: 1px 3px; border-radius: 3px; }
+        .shop-item .s-price { color: #f0c040; font-weight: bold; font-size: 11px; min-width: 34px; text-align: right; }
         .shop-item .s-action {
             background: #2a4a3a;
             border: none;
-            border-radius: 6px;
-            padding: 2px 12px;
+            border-radius: 5px;
+            padding: 2px 10px;
             color: #8fca8f;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            font-size: 10px;
+            font-size: 9px;
             cursor: pointer;
             transition: all 0.1s;
-            box-shadow: 0 3px 0 #142a1a;
+            box-shadow: 0 2px 0 #142a1a;
             touch-action: manipulation;
         }
-        .shop-item .s-action:active { transform: translateY(3px); box-shadow: 0 0px 0 #142a1a; }
-        .shop-item .s-action:disabled { opacity: 0.4; transform: translateY(2px); box-shadow: 0 1px 0 #142a1a; pointer-events: none; }
+        .shop-item .s-action:active { transform: translateY(2px); box-shadow: 0 0px 0 #142a1a; }
+        .shop-item .s-action:disabled { opacity: 0.4; transform: translateY(1px); box-shadow: 0 1px 0 #142a1a; pointer-events: none; }
         .shop-item .s-action.buy { background: #3a5a2a; color: #b0f0a0; }
         .shop-item .s-action.select { background: #4a4a2a; color: #f0e080; }
-        .shop-item .s-action.equipped { background: #2a3a2a; color: #6a9a6a; box-shadow: 0 2px 0 #1a2a1a; cursor: default; }
+        .shop-item .s-action.equipped { background: #2a3a2a; color: #6a9a6a; box-shadow: 0 1px 0 #1a2a1a; cursor: default; }
         .shop-close {
-            margin-top: 10px;
+            margin-top: 8px;
             background: #4a2a2a;
             border: none;
-            border-radius: 12px;
-            padding: 8px 0;
+            border-radius: 10px;
+            padding: 6px 0;
             width: 100%;
             color: #ff8888;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
-            box-shadow: 0 4px 0 #2a1212;
+            box-shadow: 0 3px 0 #2a1212;
             transition: all 0.08s;
             touch-action: manipulation;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
-        .shop-close:active { transform: translateY(4px); box-shadow: 0 0px 0 #2a1212; }
+        .shop-close:active { transform: translateY(3px); box-shadow: 0 0px 0 #2a1212; }
 
-        /* ─── АДАПТИВ ────────────────────────────────────────────────── */
         @media (max-width: 500px) {
+            #gameContainer { padding: 6px; max-width: 100%; border-radius: 14px; }
             .ctrl-btn {
-                width: 48px;
-                height: 48px;
-                font-size: 17px;
-                border-radius: 12px;
+                width: 38px;
+                height: 38px;
+                font-size: 13px;
+                border-radius: 8px;
             }
             .ctrl-btn.fire {
-                width: 60px;
-                height: 54px;
-                font-size: 24px;
+                width: 48px;
+                height: 44px;
+                font-size: 18px;
             }
-            .ctrl-btn.barrel { width: 42px; font-size: 15px; }
-            .ctrl-btn.fullscreen-btn { font-size: 19px; }
+            .ctrl-btn.barrel { width: 34px; font-size: 12px; }
+            .ctrl-btn.fullscreen-btn { font-size: 14px; }
             .dpad {
-                grid-template-columns: 48px 48px 48px;
-                grid-template-rows: 48px 48px 48px;
-                gap: 4px;
+                grid-template-columns: 38px 38px 38px;
+                grid-template-rows: 38px 38px 38px;
+                gap: 2px;
             }
-            .dpad .ctrl-btn { font-size: 22px; }
-            #controls { padding: 6px 6px 12px 6px; gap: 6px; }
-            .ctrl-group { gap: 6px; }
-            #hud { font-size: 10px; padding: 2px 6px; min-height: 28px; }
-            .hud-item .value { font-size: 10px; min-width: 14px; }
-            .hud-item .label { font-size: 7px; }
-            .hud-tank { font-size: 9px; padding: 1px 5px; }
-            .shop-panel { padding: 10px 12px 14px 12px; }
-            .shop-title { font-size: 15px; }
-            .shop-item .s-name { font-size: 10px; min-width: 36px; }
-            .shop-item .s-stats { font-size: 7px; gap: 2px; }
-            .shop-item .s-price { font-size: 10px; min-width: 30px; }
-            .shop-item .s-action { font-size: 9px; padding: 2px 8px; }
-            .gameover-box { padding: 16px 20px; }
-            .gameover-box h1 { font-size: 20px; }
-            .overlay-box { padding: 16px 20px; }
-            .pause-box { font-size: 20px; padding: 12px 20px; gap: 8px; }
-            .pause-box .time { font-size: 14px; }
-            .pause-box .resume-btn { font-size: 14px; padding: 6px 20px; }
+            .dpad .ctrl-btn { font-size: 17px; }
+            #hud { font-size: 8px; padding: 2px 4px; min-height: 22px; }
+            .hud-item .value { font-size: 8px; min-width: 12px; }
+            .hud-item .label { font-size: 6px; }
+            .hud-tank { font-size: 7px; padding: 1px 4px; }
+            #controls { padding: 3px 4px 6px 4px; gap: 3px; }
+            .ctrl-group { gap: 3px; }
+            .overlay-box { padding: 14px 16px; }
+            .overlay-box h1 { font-size: 20px; }
+            .shop-panel { padding: 10px 12px 12px 12px; }
+            .shop-title { font-size: 14px; }
+            .shop-item .s-name { font-size: 10px; min-width: 32px; }
+            .shop-item .s-stats { font-size: 6px; }
+            .shop-item .s-price { font-size: 10px; min-width: 28px; }
+            .shop-item .s-action { font-size: 8px; padding: 1px 8px; }
         }
         @media (max-width: 400px) {
-            .ctrl-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 14px;
-                border-radius: 10px;
-            }
-            .ctrl-btn.fire {
-                width: 50px;
-                height: 46px;
-                font-size: 20px;
-            }
-            .ctrl-btn.barrel { width: 36px; font-size: 12px; }
-            .ctrl-btn.fullscreen-btn { font-size: 16px; }
-            .dpad {
-                grid-template-columns: 40px 40px 40px;
-                grid-template-rows: 40px 40px 40px;
-                gap: 3px;
-            }
-            .dpad .ctrl-btn { font-size: 18px; }
-            #controls { padding: 4px 4px 10px 4px; gap: 4px; }
-            .ctrl-group { gap: 4px; }
-            #hud { font-size: 8px; padding: 2px 4px; min-height: 24px; }
-            .hud-item { padding: 0px 4px; }
-            .hud-item .value { font-size: 8px; min-width: 10px; }
-            .hud-tank { font-size: 7px; }
-        }
-        @media (orientation: landscape) and (max-height: 450px) {
-            #hud { font-size: 8px; min-height: 22px; padding: 1px 4px; }
-            #controls { padding: 4px 6px 10px 6px; }
-            .ctrl-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 14px;
-                border-radius: 10px;
-            }
-            .ctrl-btn.fire {
-                width: 50px;
-                height: 46px;
-                font-size: 20px;
-            }
-            .ctrl-btn.barrel { width: 36px; font-size: 12px; }
-            .ctrl-btn.fullscreen-btn { font-size: 16px; }
-            .dpad {
-                grid-template-columns: 40px 40px 40px;
-                grid-template-rows: 40px 40px 40px;
-                gap: 3px;
-            }
-            .dpad .ctrl-btn { font-size: 18px; }
-        }
-        @media (max-width: 340px) {
             .ctrl-btn {
                 width: 34px;
                 height: 34px;
                 font-size: 11px;
-                border-radius: 8px;
+                border-radius: 7px;
             }
             .ctrl-btn.fire {
-                width: 44px;
-                height: 40px;
-                font-size: 18px;
+                width: 42px;
+                height: 38px;
+                font-size: 16px;
             }
             .ctrl-btn.barrel { width: 30px; font-size: 10px; }
-            .ctrl-btn.fullscreen-btn { font-size: 13px; }
+            .ctrl-btn.fullscreen-btn { font-size: 12px; }
             .dpad {
                 grid-template-columns: 34px 34px 34px;
                 grid-template-rows: 34px 34px 34px;
                 gap: 2px;
             }
             .dpad .ctrl-btn { font-size: 14px; }
-            #controls { padding: 2px 2px 8px 2px; gap: 2px; }
+            #controls { padding: 2px 3px 5px 3px; }
             .ctrl-group { gap: 2px; }
+            #hud { font-size: 7px; min-height: 20px; }
+            .hud-item { padding: 0px 3px; }
+            .hud-item .value { font-size: 7px; min-width: 10px; }
+            .hud-tank { font-size: 6px; }
+        }
+        @media (orientation: landscape) and (max-height: 450px) {
+            #gameContainer { max-height: 96vh; padding: 4px; }
+            #hud { font-size: 7px; min-height: 18px; padding: 1px 3px; }
+            #controls { padding: 2px 3px 4px 3px; }
+            .ctrl-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 11px;
+                border-radius: 6px;
+            }
+            .ctrl-btn.fire {
+                width: 40px;
+                height: 36px;
+                font-size: 14px;
+            }
+            .ctrl-btn.barrel { width: 28px; font-size: 10px; }
+            .ctrl-btn.fullscreen-btn { font-size: 12px; }
+            .dpad {
+                grid-template-columns: 32px 32px 32px;
+                grid-template-rows: 32px 32px 32px;
+                gap: 2px;
+            }
+            .dpad .ctrl-btn { font-size: 13px; }
         }
     </style>
 </head>
@@ -535,7 +507,7 @@
             <div class="hud-tank">
                 <span>🚀</span>
                 <span class="tname" id="tankNameDisplay">Т-26</span>
-                <span style="color:#6a9a6a;font-size:9px;" id="tankHealthDisplay">❤️ 3/3</span>
+                <span style="color:#6a9a6a;font-size:8px;" id="tankHealthDisplay">❤️ 3/3</span>
             </div>
             <div class="hud-item">
                 <span class="icon">🎯</span>
@@ -596,7 +568,7 @@
         </div>
         <div class="overlay" id="pauseOverlay">
             <div class="overlay-box">
-                <h1 style="color:#b0f0b0;font-size:28px;">⏸ ПАУЗА</h1>
+                <h1 style="color:#b0f0b0;font-size:24px;">⏸ ПАУЗА</h1>
                 <div class="time" id="pauseTime">00:00</div>
                 <button class="overlay-btn" id="resumeBtn">▶ ПРОДОЛЖИТЬ</button>
             </div>
@@ -615,7 +587,6 @@
         (function() {
             'use strict';
 
-            // ─── FULLSCREEN TOGGLE ─────────────────────────────────────
             const fullscreenBtn = document.getElementById('btnFullscreen');
             const container = document.getElementById('gameContainer');
 
@@ -640,12 +611,11 @@
             }
             fullscreenBtn.addEventListener('click', toggleFullscreen);
 
-            // ─── CANVAS ───────────────────────────────────────────────────
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
             const wrapper = document.getElementById('canvasWrapper');
-            const GAME_W = 600;
-            const GAME_H = 340;
+            const GAME_W = 480;
+            const GAME_H = 270;
 
             function resizeCanvas() {
                 const rect = wrapper.getBoundingClientRect();
@@ -670,7 +640,6 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
 
-            // ─── DOM ЭЛЕМЕНТЫ ──────────────────────────────────────────
             const scoreDisplay = document.getElementById('scoreDisplay');
             const moneyDisplay = document.getElementById('moneyDisplay');
             const tankNameDisplay = document.getElementById('tankNameDisplay');
@@ -687,37 +656,35 @@
             const bossHud = document.getElementById('bossHud');
             const bossHpDisplay = document.getElementById('bossHpDisplay');
 
-            // ─── ОПРЕДЕЛЕНИЯ ТАНКОВ ────────────────────────────────────
             const TANK_DEFS = {
-                't26': { id: 't26', name: 'Т-26', cost: 0, speed: 2.4, fireRate: 28, damage: 1, health: 3,
-                    bulletSpeed: 4.5, color: '#5a7a3a', trackColor: '#3a4a2a', turretColor: '#6a8a4a', star: true },
-                'bt7': { id: 'bt7', name: 'БТ-7', cost: 60, speed: 3.6, fireRate: 22, damage: 1, health: 3,
-                    bulletSpeed: 5.0, color: '#6a8a4a', trackColor: '#4a5a3a', turretColor: '#7a9a5a', star: true },
-                't34': { id: 't34', name: 'Т-34', cost: 120, speed: 3.0, fireRate: 18, damage: 2, health: 5,
-                    bulletSpeed: 5.5, color: '#4a7a3a', trackColor: '#2a4a2a', turretColor: '#5a8a4a', star: true },
-                'kv1': { id: 'kv1', name: 'КВ-1', cost: 220, speed: 2.0, fireRate: 22, damage: 2, health: 8,
-                    bulletSpeed: 4.8, color: '#3a6a3a', trackColor: '#2a3a2a', turretColor: '#4a7a4a', star: true },
-                'is2': { id: 'is2', name: 'ИС-2', cost: 350, speed: 2.2, fireRate: 24, damage: 3, health: 7,
-                    bulletSpeed: 5.2, color: '#2a5a2a', trackColor: '#1a3a1a', turretColor: '#3a6a3a', star: true },
-                't54': { id: 't54', name: 'Т-54', cost: 550, speed: 4.0, fireRate: 14, damage: 3, health: 6,
-                    bulletSpeed: 6.0, color: '#4a7a5a', trackColor: '#2a4a3a', turretColor: '#5a8a6a', star: true },
-                't62': { id: 't62', name: 'Т-62', cost: 800, speed: 3.8, fireRate: 12, damage: 4, health: 8,
-                    bulletSpeed: 6.2, color: '#4a6a5a', trackColor: '#2a4a3a', turretColor: '#5a7a6a', star: true }
+                't26': { id: 't26', name: 'Т-26', cost: 0, speed: 2.2, fireRate: 30, damage: 1, health: 3,
+                    bulletSpeed: 4.2, color: '#5a7a3a', trackColor: '#3a4a2a', turretColor: '#6a8a4a', star: true },
+                'bt7': { id: 'bt7', name: 'БТ-7', cost: 50, speed: 3.4, fireRate: 24, damage: 1, health: 3,
+                    bulletSpeed: 4.6, color: '#6a8a4a', trackColor: '#4a5a3a', turretColor: '#7a9a5a', star: true },
+                't34': { id: 't34', name: 'Т-34', cost: 100, speed: 2.8, fireRate: 20, damage: 2, health: 5,
+                    bulletSpeed: 5.0, color: '#4a7a3a', trackColor: '#2a4a2a', turretColor: '#5a8a4a', star: true },
+                'kv1': { id: 'kv1', name: 'КВ-1', cost: 180, speed: 1.8, fireRate: 24, damage: 2, health: 8,
+                    bulletSpeed: 4.4, color: '#3a6a3a', trackColor: '#2a3a2a', turretColor: '#4a7a4a', star: true },
+                'is2': { id: 'is2', name: 'ИС-2', cost: 280, speed: 2.0, fireRate: 26, damage: 3, health: 7,
+                    bulletSpeed: 4.8, color: '#2a5a2a', trackColor: '#1a3a1a', turretColor: '#3a6a3a', star: true },
+                't54': { id: 't54', name: 'Т-54', cost: 450, speed: 3.8, fireRate: 16, damage: 3, health: 6,
+                    bulletSpeed: 5.4, color: '#4a7a5a', trackColor: '#2a4a3a', turretColor: '#5a8a6a', star: true },
+                't62': { id: 't62', name: 'Т-62', cost: 650, speed: 3.6, fireRate: 14, damage: 4, health: 8,
+                    bulletSpeed: 5.6, color: '#4a6a5a', trackColor: '#2a4a3a', turretColor: '#5a7a6a', star: true }
             };
 
-            // ─── СОСТОЯНИЕ ИГРЫ ──────────────────────────────────────
             const state = {
                 player: {
-                    x: 70,
-                    y: 180,
-                    w: 36,
-                    h: 20,
+                    x: 55,
+                    y: 140,
+                    w: 30,
+                    h: 17,
                     health: 3,
                     maxHealth: 3,
-                    speed: 2.4,
-                    fireRate: 28,
+                    speed: 2.2,
+                    fireRate: 30,
                     damage: 1,
-                    bulletSpeed: 4.5,
+                    bulletSpeed: 4.2,
                     fireCooldown: 0,
                     alive: true,
                     invincible: 0,
@@ -733,7 +700,7 @@
                 score: 0,
                 level: 1,
                 spawnTimer: 0,
-                spawnInterval: 120,
+                spawnInterval: 130,
                 maxEnemies: 2,
                 gameOver: false,
                 shopOpen: false,
@@ -750,14 +717,13 @@
                 roadPoints: []
             };
 
-            // ─── ГЕНЕРАЦИЯ КАРТЫ ──────────────────────────────────────
             function generateMap() {
                 state.buildings = [];
-                for (let i = 0; i < 8; i++) {
-                    let x = 60 + i * 70 + Math.random() * 30;
-                    let y = 10 + Math.random() * 70;
-                    let w = 25 + Math.random() * 35;
-                    let h = 30 + Math.random() * 45;
+                for (let i = 0; i < 6; i++) {
+                    let x = 50 + i * 70 + Math.random() * 25;
+                    let y = 8 + Math.random() * 55;
+                    let w = 20 + Math.random() * 28;
+                    let h = 25 + Math.random() * 35;
                     if (x + w > GAME_W) break;
                     state.buildings.push({
                         x: x,
@@ -769,22 +735,24 @@
                     });
                 }
                 state.roadPoints = [];
-                for (let i = 0; i <= 20; i++) {
-                    let x = i * (GAME_W / 20);
-                    let y = GAME_H - 20 + Math.sin(i * 0.5) * 4 + Math.sin(i * 1.3 + 1) * 3;
+                for (let i = 0; i <= 16; i++) {
+                    let x = i * (GAME_W / 16);
+                    let y = GAME_H - 16 + Math.sin(i * 0.5) * 3 + Math.sin(i * 1.3 + 1) * 2.5;
                     state.roadPoints.push({ x, y });
                 }
             }
             generateMap();
 
-            // ─── ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ──────────────────────────────
             function rand(min, max) { return Math.random() * (max - min) + min; }
+
             function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+
             function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
             function getTankDef(id) { return TANK_DEFS[id] || TANK_DEFS['t26']; }
+
             function getPlayerTankDef() { return getTankDef(state.currentTankId); }
 
-            // ─── ОБНОВИТЬ HUD ──────────────────────────────────────────
             function updateHUD() {
                 const def = getPlayerTankDef();
                 scoreDisplay.textContent = state.score;
@@ -808,65 +776,64 @@
                 }
             }
 
-            // ─── СПАВН ВРАГА ──────────────────────────────────────────
             function spawnEnemy() {
                 if (state.enemies.length >= state.maxEnemies || state.gameOver || state.paused) return;
 
                 const r = Math.random();
                 let enemyType = r < 0.6 ? 'light' : (r < 0.85 ? 'medium' : 'heavy');
                 let health, speed, w, h, color, turretColor, trackColor, damage, bulletSpeed, fireRate;
-                const baseSpeed = 0.5 + state.level * 0.02;
+                const baseSpeed = 0.4 + state.level * 0.02;
                 const enemyDamage = 1;
 
                 if (enemyType === 'light') {
                     health = 1;
                     speed = baseSpeed * 1.3;
-                    w = 24;
-                    h = 14;
+                    w = 20;
+                    h = 12;
                     color = '#5a6a4a';
                     turretColor = '#6a7a5a';
                     trackColor = '#3a4a2a';
                     damage = enemyDamage;
-                    bulletSpeed = 1.5 + state.level * 0.03;
-                    fireRate = 70 - Math.min(state.level, 15);
+                    bulletSpeed = 1.3 + state.level * 0.03;
+                    fireRate = 75 - Math.min(state.level, 15);
                 } else if (enemyType === 'medium') {
                     health = 2;
                     speed = baseSpeed * 1.0;
-                    w = 30;
-                    h = 18;
+                    w = 25;
+                    h = 15;
                     color = '#6a5a3a';
                     turretColor = '#7a6a4a';
                     trackColor = '#4a3a2a';
                     damage = enemyDamage;
-                    bulletSpeed = 1.8 + state.level * 0.03;
-                    fireRate = 60 - Math.min(state.level, 12);
+                    bulletSpeed = 1.5 + state.level * 0.03;
+                    fireRate = 65 - Math.min(state.level, 12);
                 } else {
                     health = 3;
                     speed = baseSpeed * 0.7;
-                    w = 36;
-                    h = 22;
+                    w = 30;
+                    h = 18;
                     color = '#4a4a3a';
                     turretColor = '#5a5a4a';
                     trackColor = '#2a2a1a';
                     damage = enemyDamage;
-                    bulletSpeed = 1.6 + state.level * 0.025;
-                    fireRate = 50 - Math.min(state.level, 10);
+                    bulletSpeed = 1.4 + state.level * 0.025;
+                    fireRate = 55 - Math.min(state.level, 10);
                 }
 
                 state.enemies.push({
                     x: GAME_W + 10,
-                    y: 40 + rand(0, GAME_H - 70 - h),
+                    y: 30 + rand(0, GAME_H - 55 - h),
                     w: w,
                     h: h,
                     health: health,
                     maxHealth: health,
-                    speed: Math.max(0.15, speed),
+                    speed: Math.max(0.12, speed),
                     color: color,
                     turretColor: turretColor,
                     trackColor: trackColor,
                     damage: damage,
-                    bulletSpeed: Math.max(1.2, bulletSpeed),
-                    fireRate: Math.max(30, fireRate),
+                    bulletSpeed: Math.max(1.1, bulletSpeed),
+                    fireRate: Math.max(32, fireRate),
                     fireCooldown: randInt(20, 50),
                     reward: 5,
                     alive: true,
@@ -875,20 +842,19 @@
                 });
             }
 
-            // ─── СПАВН БОССА ──────────────────────────────────────────
             function spawnBoss() {
                 if (state.bossSpawned || state.gameOver) return;
                 state.bossSpawned = true;
                 state.boss = {
-                    x: GAME_W + 20,
-                    y: GAME_H / 2 - 30,
-                    w: 60,
-                    h: 40,
+                    x: GAME_W + 16,
+                    y: GAME_H / 2 - 24,
+                    w: 50,
+                    h: 34,
                     health: 1000,
                     maxHealth: 1000,
-                    speed: 0.2,
+                    speed: 0.18,
                     damage: 1,
-                    bulletSpeed: 1.8,
+                    bulletSpeed: 1.6,
                     fireRate: 240,
                     fireCooldown: randInt(0, 50),
                     color: '#4a2a2a',
@@ -899,23 +865,22 @@
                     trackOffset: rand(0, 100),
                     star: true
                 };
-                for (let i = 0; i < 15; i++) {
+                for (let i = 0; i < 12; i++) {
                     state.explosions.push({
                         x: state.boss.x + rand(0, state.boss.w),
                         y: state.boss.y + rand(0, state.boss.h),
-                        r: rand(3, 10),
-                        life: randInt(12, 25),
-                        maxLife: 25,
+                        r: rand(3, 8),
+                        life: randInt(12, 22),
+                        maxLife: 22,
                         color: ['#ff6644', '#ffaa44', '#ffdd66', '#ff8844'][randInt(0, 3)],
-                        vx: rand(-1.5, 1.5),
-                        vy: rand(-2.5, 0),
+                        vx: rand(-1.2, 1.2),
+                        vy: rand(-2, 0),
                         gravity: 0.04
                     });
                 }
                 updateHUD();
             }
 
-            // ─── ВЫСТРЕЛ ИГРОКА ──────────────────────────────────────
             function playerShoot() {
                 if (state.gameOver || state.paused) return;
                 const p = state.player;
@@ -926,7 +891,7 @@
                 state.bullets.push({
                     x: p.x + p.w - 2,
                     y: p.y + p.h / 2 - 2,
-                    w: 7,
+                    w: 6,
                     h: 3,
                     vx: Math.cos(angle) * def.bulletSpeed,
                     vy: Math.sin(angle) * def.bulletSpeed,
@@ -934,16 +899,15 @@
                     friendly: true
                 });
                 state.explosions.push({
-                    x: p.x + p.w - 6,
-                    y: p.y + p.h / 2 - 4,
-                    r: 5,
-                    life: 6,
-                    maxLife: 6,
+                    x: p.x + p.w - 5,
+                    y: p.y + p.h / 2 - 3,
+                    r: 4,
+                    life: 5,
+                    maxLife: 5,
                     color: '#ffdd44'
                 });
             }
 
-            // ─── ВЫСТРЕЛ ВРАГА ──────────────────────────────────────
             function enemyShoot(enemy) {
                 if (enemy.fireCooldown > 0 || !enemy.alive) return;
                 const p = state.player;
@@ -952,9 +916,9 @@
                 const angle = Math.PI + rand(-0.15, 0.15);
                 const speed = enemy.bulletSpeed * 0.5;
                 state.enemyBullets.push({
-                    x: enemy.x - 4,
+                    x: enemy.x - 3,
                     y: enemy.y + enemy.h / 2 - 2,
-                    w: 5,
+                    w: 4,
                     h: 3,
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed,
@@ -962,17 +926,16 @@
                 });
             }
 
-            // ─── ВЗРЫВ ────────────────────────────────────────────────
             function createExplosion(x, y, size, color) {
-                const count = Math.min(6 + randInt(0, 4), 10);
+                const count = Math.min(5 + randInt(0, 4), 8);
                 for (let i = 0; i < count; i++) {
                     const angle = rand(0, Math.PI * 2);
-                    const speed = rand(0.3, 1.8 + size * 0.3);
-                    const life = randInt(8, 16);
+                    const speed = rand(0.3, 1.6 + size * 0.3);
+                    const life = randInt(7, 14);
                     state.explosions.push({
                         x: x + rand(-3, 3),
                         y: y + rand(-3, 3),
-                        r: rand(2, 4 + size * 1.5),
+                        r: rand(2, 4 + size * 1.2),
                         life: life,
                         maxLife: life,
                         color: color || ['#ff6644', '#ffaa44', '#ff8844', '#ff5533'][randInt(0, 3)],
@@ -983,7 +946,6 @@
                 }
             }
 
-            // ─── УНИЧТОЖЕНИЕ ВРАГА ──────────────────────────────────
             function destroyEnemy(enemy) {
                 if (!enemy.alive) return;
                 enemy.alive = false;
@@ -993,7 +955,7 @@
                     state.player.health += 1;
                     if (state.player.health > state.player.maxHealth) state.player.health = state.player.maxHealth;
                 }
-                createExplosion(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, 0.7, '#ffdd44');
+                createExplosion(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, 0.6, '#ffdd44');
                 state.enemiesKilled++;
                 if (state.enemiesKilled >= 60 && !state.bossSpawned && !state.bossDefeated) {
                     spawnBoss();
@@ -1002,12 +964,11 @@
                 if (newLevel > state.level) {
                     state.level = newLevel;
                     state.maxEnemies = Math.min(2 + Math.floor(state.level / 2), 5);
-                    state.spawnInterval = Math.max(50, 120 - state.level * 3);
+                    state.spawnInterval = Math.max(50, 130 - state.level * 3);
                 }
                 updateHUD();
             }
 
-            // ─── УНИЧТОЖЕНИЕ БОССА ──────────────────────────────────
             function destroyBoss() {
                 const boss = state.boss;
                 if (!boss || !boss.alive) return;
@@ -1015,28 +976,28 @@
                 state.bossDefeated = true;
                 state.score += 500;
                 state.money += 200;
-                for (let i = 0; i < 30; i++) {
+                for (let i = 0; i < 25; i++) {
                     state.explosions.push({
                         x: boss.x + rand(0, boss.w),
                         y: boss.y + rand(0, boss.h),
-                        r: rand(3, 14),
-                        life: randInt(12, 30),
-                        maxLife: 30,
+                        r: rand(3, 12),
+                        life: randInt(12, 26),
+                        maxLife: 26,
                         color: ['#ff6644', '#ffaa44', '#ffdd66', '#ff8844', '#ff5533', '#ff3333'][randInt(0, 5)],
-                        vx: rand(-2.5, 2.5),
-                        vy: rand(-3.5, 0.5),
+                        vx: rand(-2, 2),
+                        vy: rand(-3, 0.5),
                         gravity: 0.04
                     });
                 }
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 5; i++) {
                     state.coins.push({
                         x: boss.x + rand(0, boss.w),
                         y: boss.y + rand(0, boss.h),
-                        w: 8,
-                        h: 8,
+                        w: 7,
+                        h: 7,
                         value: 20,
-                        vy: -2 - rand(0, 1.5),
-                        life: 150,
+                        vy: -1.5 - rand(0, 1.5),
+                        life: 140,
                         bob: rand(0, 5),
                         collected: false
                     });
@@ -1044,13 +1005,12 @@
                 updateHUD();
             }
 
-            // ─── СБРОС ИГРЫ ──────────────────────────────────────────
             function resetGame() {
                 const def = getTankDef(state.currentTankId);
-                state.player.x = 70;
-                state.player.y = 180;
-                state.player.w = 36;
-                state.player.h = 20;
+                state.player.x = 55;
+                state.player.y = 140;
+                state.player.w = 30;
+                state.player.h = 17;
                 state.player.health = def.health;
                 state.player.maxHealth = def.health;
                 state.player.speed = def.speed;
@@ -1071,7 +1031,7 @@
                 state.score = 0;
                 state.level = 1;
                 state.spawnTimer = 0;
-                state.spawnInterval = 120;
+                state.spawnInterval = 130;
                 state.maxEnemies = 2;
                 state.gameOver = false;
                 state.paused = false;
@@ -1093,7 +1053,7 @@
                 state.currentTankId = 't26';
                 state.level = 1;
                 state.maxEnemies = 2;
-                state.spawnInterval = 120;
+                state.spawnInterval = 130;
                 state.timeSeconds = 0;
                 state.enemiesKilled = 0;
                 state.bossSpawned = false;
@@ -1102,7 +1062,6 @@
                 renderShop();
             }
 
-            // ─── ПАУЗА ──────────────────────────────────────────────────
             function togglePause() {
                 if (state.gameOver) return;
                 state.paused = !state.paused;
@@ -1119,7 +1078,6 @@
                 }
             }
 
-            // ─── КЛАВИАТУРА ─────────────────────────────────────────────
             const keys = {
                 left: false,
                 right: false,
@@ -1227,7 +1185,6 @@
                 }
             });
 
-            // ─── КНОПКИ УПРАВЛЕНИЯ ──────────────────────────────────────
             function setupButton(id, key) {
                 const btn = document.getElementById(id);
                 if (!btn) return;
@@ -1277,11 +1234,9 @@
             }, { passive: false });
             fireBtn.addEventListener('touchcancel', (e) => { keys.fire = false; }, { passive: false });
 
-            // ─── ПАУЗА (кнопки) ────────────────────────────────────────
             document.getElementById('btnPause').addEventListener('click', togglePause);
             document.getElementById('resumeBtn').addEventListener('click', resumeGame);
 
-            // ─── РЕСТАРТ (кнопка) ──────────────────────────────────────
             document.getElementById('btnRestart').addEventListener('click', function() {
                 if (state.gameOver) {
                     fullRestart();
@@ -1292,7 +1247,6 @@
                 }
             });
 
-            // ─── МАГАЗИН ──────────────────────────────────────────────
             function renderShop() {
                 const list = document.getElementById('shopList');
                 list.innerHTML = '';
@@ -1422,7 +1376,6 @@
 
             document.getElementById('restartBtn').addEventListener('click', fullRestart);
 
-            // ─── ОБНОВЛЕНИЕ ──────────────────────────────────────────
             function update() {
                 if (state.gameOver || state.paused) return;
 
@@ -1451,14 +1404,13 @@
                 if (keys.up) dy = -p.speed * 0.6;
                 if (keys.down) dy = p.speed * 0.6;
                 if (dx !== 0) p.trackOffset += 0.3;
-                p.x = clamp(p.x + dx, 10, GAME_W - p.w - 10);
-                p.y = clamp(p.y + dy, 30, GAME_H - p.h - 10);
+                p.x = clamp(p.x + dx, 8, GAME_W - p.w - 8);
+                p.y = clamp(p.y + dy, 24, GAME_H - p.h - 8);
 
                 if (keys.barrelUp) p.barrelAngle = Math.max(-0.5, p.barrelAngle - 0.03);
                 if (keys.barrelDown) p.barrelAngle = Math.min(0.5, p.barrelAngle + 0.03);
                 if (keys.fire) playerShoot();
 
-                // ── Пули игрока ──
                 for (let i = state.bullets.length - 1; i >= 0; i--) {
                     const b = state.bullets[i];
                     b.x += b.vx;
@@ -1473,7 +1425,7 @@
                         if (b.x < enemy.x + enemy.w && b.x + b.w > enemy.x &&
                             b.y < enemy.y + enemy.h && b.y + b.h > enemy.y) {
                             enemy.health -= b.damage;
-                            enemy.hitFlash = 6;
+                            enemy.hitFlash = 5;
                             createExplosion(b.x, b.y, 0.3, '#ffaa44');
                             if (enemy.health <= 0) destroyEnemy(enemy);
                             hit = true;
@@ -1485,7 +1437,7 @@
                         if (b.x < boss.x + boss.w && b.x + b.w > boss.x &&
                             b.y < boss.y + boss.h && b.y + b.h > boss.y) {
                             boss.health -= b.damage;
-                            boss.hitFlash = 6;
+                            boss.hitFlash = 5;
                             createExplosion(b.x, b.y, 0.4, '#ff8844');
                             if (boss.health <= 0) destroyBoss();
                             hit = true;
@@ -1495,7 +1447,6 @@
                     if (hit) state.bullets.splice(i, 1);
                 }
 
-                // ── Пули врагов ──
                 for (let i = state.enemyBullets.length - 1; i >= 0; i--) {
                     const b = state.enemyBullets[i];
                     b.x += b.vx;
@@ -1514,7 +1465,7 @@
                             updateHUD();
                             if (p.health <= 0) {
                                 p.alive = false;
-                                createExplosion(p.x + p.w / 2, p.y + p.h / 2, 1.5, '#ff6644');
+                                createExplosion(p.x + p.w / 2, p.y + p.h / 2, 1.2, '#ff6644');
                                 state.gameOver = true;
                                 finalScore.textContent = state.score;
                                 gameoverOverlay.classList.add('active');
@@ -1524,7 +1475,6 @@
                     }
                 }
 
-                // ── Враги ──
                 for (let i = state.enemies.length - 1; i >= 0; i--) {
                     const enemy = state.enemies[i];
                     if (!enemy.alive) { state.enemies.splice(i, 1); continue; }
@@ -1532,12 +1482,12 @@
                     const targetY = state.player.y + state.player.h / 2 - enemy.h / 2;
                     const dy2 = targetY - enemy.y;
                     const moveSpeed = enemy.speed * 0.3;
-                    if (Math.abs(dy2) > 6) {
+                    if (Math.abs(dy2) > 5) {
                         enemy.y += Math.sign(dy2) * Math.min(Math.abs(dy2) * 0.02, moveSpeed);
                     }
-                    enemy.y = clamp(enemy.y, 30, GAME_H - enemy.h - 10);
+                    enemy.y = clamp(enemy.y, 24, GAME_H - enemy.h - 8);
                     enemy.x -= enemy.speed * 0.25;
-                    if (enemy.x < -60) { state.enemies.splice(i, 1); continue; }
+                    if (enemy.x < -50) { state.enemies.splice(i, 1); continue; }
                     if (enemy.fireCooldown > 0) enemy.fireCooldown--;
                     if (Math.random() < 0.15) enemyShoot(enemy);
                     if (p.alive && p.invincible === 0) {
@@ -1545,12 +1495,12 @@
                             enemy.y < p.y + p.h && enemy.y + enemy.h > p.y) {
                             p.health -= 1;
                             p.invincible = 40;
-                            createExplosion(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, 0.5, '#ff6644');
-                            enemy.x += 30;
+                            createExplosion(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, 0.4, '#ff6644');
+                            enemy.x += 25;
                             updateHUD();
                             if (p.health <= 0) {
                                 p.alive = false;
-                                createExplosion(p.x + p.w / 2, p.y + p.h / 2, 1.5, '#ff6644');
+                                createExplosion(p.x + p.w / 2, p.y + p.h / 2, 1.2, '#ff6644');
                                 state.gameOver = true;
                                 finalScore.textContent = state.score;
                                 gameoverOverlay.classList.add('active');
@@ -1560,7 +1510,6 @@
                     enemy.trackOffset += 0.12;
                 }
 
-                // ── Босс ──
                 if (state.boss && state.boss.alive) {
                     const boss = state.boss;
                     if (boss.hitFlash > 0) boss.hitFlash--;
@@ -1570,7 +1519,7 @@
                     if (Math.abs(dyBoss) > 5) {
                         boss.y += Math.sign(dyBoss) * Math.min(Math.abs(dyBoss) * 0.02, moveSpeedBoss);
                     }
-                    boss.y = clamp(boss.y, 30, GAME_H - boss.h - 10);
+                    boss.y = clamp(boss.y, 24, GAME_H - boss.h - 8);
                     boss.x -= boss.speed * 0.2;
                     if (boss.fireCooldown > 0) boss.fireCooldown--;
                     if (boss.fireCooldown === 0 && Math.random() < 0.3) {
@@ -1582,7 +1531,7 @@
                             state.enemyBullets.push({
                                 x: boss.x - 4,
                                 y: boss.y + boss.h / 2 - 2,
-                                w: 7,
+                                w: 6,
                                 h: 4,
                                 vx: Math.cos(angle) * speed,
                                 vy: Math.sin(angle) * speed,
@@ -1590,11 +1539,11 @@
                                 isBoss: true
                             });
                             state.explosions.push({
-                                x: boss.x - 6,
-                                y: boss.y + boss.h / 2 - 4,
-                                r: 4,
-                                life: 5,
-                                maxLife: 5,
+                                x: boss.x - 5,
+                                y: boss.y + boss.h / 2 - 3,
+                                r: 3,
+                                life: 4,
+                                maxLife: 4,
                                 color: '#ff8844'
                             });
                         }
@@ -1604,12 +1553,12 @@
                             boss.y < p.y + p.h && boss.y + boss.h > p.y) {
                             p.health -= 1;
                             p.invincible = 40;
-                            createExplosion(boss.x + boss.w / 2, boss.y + boss.h / 2, 0.6, '#ff6644');
-                            boss.x += 20;
+                            createExplosion(boss.x + boss.w / 2, boss.y + boss.h / 2, 0.5, '#ff6644');
+                            boss.x += 18;
                             updateHUD();
                             if (p.health <= 0) {
                                 p.alive = false;
-                                createExplosion(p.x + p.w / 2, p.y + p.h / 2, 1.5, '#ff6644');
+                                createExplosion(p.x + p.w / 2, p.y + p.h / 2, 1.2, '#ff6644');
                                 state.gameOver = true;
                                 finalScore.textContent = state.score;
                                 gameoverOverlay.classList.add('active');
@@ -1619,7 +1568,6 @@
                     boss.trackOffset += 0.1;
                 }
 
-                // ── Спавн врагов ──
                 state.spawnTimer++;
                 if (state.spawnTimer >= state.spawnInterval) {
                     state.spawnTimer = 0;
@@ -1627,7 +1575,6 @@
                     if (state.level > 8 && Math.random() < 0.05) spawnEnemy();
                 }
 
-                // ── Взрывы ──
                 for (let i = state.explosions.length - 1; i >= 0; i--) {
                     const e = state.explosions[i];
                     e.x += e.vx || 0;
@@ -1637,7 +1584,6 @@
                     if (e.life <= 0) state.explosions.splice(i, 1);
                 }
 
-                // ── Монеты ──
                 for (let i = state.coins.length - 1; i >= 0; i--) {
                     const coin = state.coins[i];
                     if (coin.collected) { state.coins.splice(i, 1); continue; }
@@ -1662,7 +1608,6 @@
                 updateHUD();
             }
 
-            // ─── ОТРИСОВКА ТАНКА ───────────────────────────────────────
             function drawTank(ctx, x, y, w, h, color, turretColor, trackColor, trackOffset, facing, flash, barrelAngle,
                 star) {
                 const f = facing || 1;
@@ -1675,14 +1620,14 @@
                 const bodyY = y + h * 0.25;
 
                 ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                ctx.shadowBlur = 6;
+                ctx.shadowBlur = 5;
                 ctx.shadowOffsetY = 2;
 
                 ctx.fillStyle = bodyColor;
                 ctx.strokeStyle = '#1a1a1a';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 0.8;
                 ctx.beginPath();
-                ctx.roundRect(bodyX, bodyY, bodyW, bodyH, 4);
+                ctx.roundRect(bodyX, bodyY, bodyW, bodyH, 3);
                 ctx.fill();
                 ctx.stroke();
 
@@ -1715,17 +1660,17 @@
                 const turretX = x + w * 0.4;
                 const turretY = y + h * 0.1;
 
-                ctx.shadowBlur = 4;
+                ctx.shadowBlur = 3;
                 ctx.shadowOffsetY = 1;
                 ctx.fillStyle = turretColor || color;
                 ctx.strokeStyle = '#1a1a1a';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 0.8;
                 ctx.beginPath();
-                ctx.roundRect(turretX, turretY, turretW, turretH, 5);
+                ctx.roundRect(turretX, turretY, turretW, turretH, 4);
                 ctx.fill();
                 ctx.stroke();
 
-                ctx.shadowBlur = 3;
+                ctx.shadowBlur = 2;
                 const barrelLen = w * 0.5;
                 const barrelW = 3;
                 const barrelX = (f > 0) ? turretX + turretW : turretX - barrelLen;
@@ -1736,11 +1681,11 @@
                 ctx.rotate(barrelAngle || 0);
                 ctx.fillStyle = '#2a2a2a';
                 ctx.strokeStyle = '#1a1a1a';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 0.8;
                 ctx.fillRect(0, -barrelW / 2, barrelLen, barrelW);
                 ctx.strokeRect(0, -barrelW / 2, barrelLen, barrelW);
                 ctx.fillStyle = '#1a1a1a';
-                ctx.fillRect(barrelLen - 5, -barrelW / 2 - 1, 5, barrelW + 2);
+                ctx.fillRect(barrelLen - 4, -barrelW / 2 - 1, 4, barrelW + 2);
                 ctx.restore();
 
                 if (star) {
@@ -1749,8 +1694,8 @@
                     const sy = turretY + turretH / 2;
                     ctx.fillStyle = '#cc2222';
                     ctx.strokeStyle = '#aa1111';
-                    ctx.lineWidth = 1;
-                    const size = 4;
+                    ctx.lineWidth = 0.8;
+                    const size = 3.5;
                     ctx.beginPath();
                     for (let i = 0; i < 5; i++) {
                         const angle = (i * 4 * Math.PI / 5) - Math.PI / 2;
@@ -1767,14 +1712,13 @@
 
                 ctx.shadowBlur = 0;
                 ctx.beginPath();
-                ctx.arc(turretX + turretW * 0.6, turretY + turretH * 0.25, 2.5, 0, Math.PI * 2);
+                ctx.arc(turretX + turretW * 0.6, turretY + turretH * 0.25, 2, 0, Math.PI * 2);
                 ctx.fillStyle = '#1a1a1a';
                 ctx.fill();
 
                 ctx.restore();
             }
 
-            // ─── ОТРИСОВКА ────────────────────────────────────────────
             function draw() {
                 ctx.clearRect(0, 0, GAME_W, GAME_H);
 
@@ -1788,46 +1732,46 @@
                 for (const bld of state.buildings) {
                     ctx.fillStyle = bld.color;
                     ctx.shadowColor = 'rgba(0,0,0,0.2)';
-                    ctx.shadowBlur = 5;
+                    ctx.shadowBlur = 4;
                     ctx.shadowOffsetY = 2;
                     ctx.fillRect(bld.x, bld.y, bld.w, bld.h);
                     ctx.shadowBlur = 0;
-                    const winCount = 2 + Math.floor(bld.w / 20);
+                    const winCount = 2 + Math.floor(bld.w / 18);
                     const gap = bld.w / (winCount + 1);
                     for (let i = 0; i < winCount; i++) {
                         const wx = bld.x + gap * (i + 1) - 3;
-                        const wy = bld.y + 6 + (bld.h - 12) * 0.3;
+                        const wy = bld.y + 5 + (bld.h - 10) * 0.3;
                         ctx.fillStyle = bld.destroyed ? '#2a2a1a' : '#8a9a7a';
-                        ctx.fillRect(wx, wy, 6, 6);
+                        ctx.fillRect(wx, wy, 5, 5);
                         if (!bld.destroyed) {
                             ctx.fillStyle = '#aabb99';
-                            ctx.fillRect(wx + 1, wy + 1, 4, 4);
+                            ctx.fillRect(wx + 1, wy + 1, 3, 3);
                         }
                     }
                     if (bld.destroyed) {
                         ctx.fillStyle = '#2a2a1a';
-                        ctx.fillRect(bld.x + 4, bld.y + bld.h - 4, bld.w - 8, 3);
+                        ctx.fillRect(bld.x + 3, bld.y + bld.h - 3, bld.w - 6, 2);
                     }
                 }
 
                 ctx.shadowBlur = 0;
                 ctx.beginPath();
-                ctx.moveTo(0, GAME_H - 20);
+                ctx.moveTo(0, GAME_H - 16);
                 for (const pt of state.roadPoints) {
                     ctx.lineTo(pt.x, pt.y);
                 }
-                ctx.lineTo(GAME_W, GAME_H - 20);
+                ctx.lineTo(GAME_W, GAME_H - 16);
                 ctx.lineTo(GAME_W, GAME_H);
                 ctx.lineTo(0, GAME_H);
                 ctx.closePath();
                 ctx.fillStyle = '#2a3a2a';
                 ctx.fill();
                 ctx.strokeStyle = '#1a2a1a';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 0.8;
                 ctx.stroke();
 
                 ctx.strokeStyle = '#3a4a3a';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 0.8;
                 ctx.beginPath();
                 for (const pt of state.roadPoints) {
                     if (pt === state.roadPoints[0]) ctx.moveTo(pt.x, pt.y);
@@ -1852,7 +1796,7 @@
                         const barW = enemy.w;
                         const barH = 2;
                         const barX = enemy.x;
-                        const barY = enemy.y - 6;
+                        const barY = enemy.y - 5;
                         ctx.fillStyle = 'rgba(0,0,0,0.5)';
                         ctx.fillRect(barX, barY, barW, barH);
                         ctx.fillStyle = '#44cc44';
@@ -1873,30 +1817,30 @@
                         0,
                         true
                     );
-                    const barW = boss.w + 16;
-                    const barH = 5;
-                    const barX = boss.x - 8;
-                    const barY = boss.y - 14;
+                    const barW = boss.w + 14;
+                    const barH = 4;
+                    const barX = boss.x - 7;
+                    const barY = boss.y - 12;
                     ctx.fillStyle = 'rgba(0,0,0,0.6)';
                     ctx.fillRect(barX, barY, barW, barH);
                     const hpRatio = boss.health / boss.maxHealth;
                     const hpColor = hpRatio > 0.5 ? '#44cc44' : (hpRatio > 0.25 ? '#ccaa44' : '#cc4444');
                     ctx.fillStyle = hpColor;
-                    ctx.fillRect(barX + 2, barY + 2, (barW - 4) * hpRatio, barH - 4);
+                    ctx.fillRect(barX + 1, barY + 1, (barW - 2) * hpRatio, barH - 2);
                     ctx.strokeStyle = '#cc4444';
-                    ctx.lineWidth = 1;
+                    ctx.lineWidth = 0.8;
                     ctx.strokeRect(barX, barY, barW, barH);
                     ctx.fillStyle = '#ff6666';
-                    ctx.font = 'bold 9px monospace';
+                    ctx.font = 'bold 8px monospace';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'bottom';
-                    ctx.fillText('👹 БОСС', boss.x + boss.w / 2, barY - 2);
+                    ctx.fillText('👹 БОСС', boss.x + boss.w / 2, barY - 1);
                 }
 
                 for (const b of state.bullets) {
                     ctx.fillStyle = '#ffff44';
                     ctx.shadowColor = '#ffff44';
-                    ctx.shadowBlur = 10;
+                    ctx.shadowBlur = 8;
                     ctx.fillRect(b.x, b.y, b.w, b.h);
                     ctx.shadowBlur = 0;
                     ctx.fillStyle = '#ffffff';
@@ -1906,7 +1850,7 @@
                 for (const b of state.enemyBullets) {
                     ctx.fillStyle = b.isBoss ? '#ff6644' : '#ff5533';
                     ctx.shadowColor = b.isBoss ? '#ff6644' : '#ff5533';
-                    ctx.shadowBlur = 8;
+                    ctx.shadowBlur = 6;
                     ctx.fillRect(b.x, b.y, b.w, b.h);
                     ctx.shadowBlur = 0;
                     ctx.fillStyle = '#ff8866';
@@ -1927,10 +1871,10 @@
                         p.barrelAngle,
                         true
                     );
-                    const barW = p.w + 8;
-                    const barH = 3;
-                    const barX = p.x - 4;
-                    const barY = p.y - 12;
+                    const barW = p.w + 6;
+                    const barH = 2.5;
+                    const barX = p.x - 3;
+                    const barY = p.y - 10;
                     ctx.shadowBlur = 0;
                     ctx.fillStyle = 'rgba(0,0,0,0.5)';
                     ctx.fillRect(barX, barY, barW, barH);
@@ -1943,25 +1887,25 @@
                 for (const coin of state.coins) {
                     if (coin.collected) continue;
                     const bobY = Math.sin(coin.bob || 0) * 1.5;
-                    const cx = coin.x + 4;
-                    const cy = coin.y + 4 + bobY;
+                    const cx = coin.x + 3.5;
+                    const cy = coin.y + 3.5 + bobY;
                     ctx.save();
                     ctx.shadowColor = 'rgba(255,200,50,0.2)';
-                    ctx.shadowBlur = 8;
-                    const r = 4;
+                    ctx.shadowBlur = 6;
+                    const r = 3.5;
                     ctx.beginPath();
                     ctx.arc(cx, cy, r, 0, Math.PI * 2);
                     ctx.fillStyle = '#f0c040';
                     ctx.fill();
                     ctx.strokeStyle = '#c09020';
-                    ctx.lineWidth = 1;
+                    ctx.lineWidth = 0.8;
                     ctx.stroke();
                     ctx.beginPath();
-                    ctx.arc(cx - 1.5, cy - 1.5, 1.5, 0, Math.PI * 2);
+                    ctx.arc(cx - 1, cy - 1, 1, 0, Math.PI * 2);
                     ctx.fillStyle = 'rgba(255,255,200,0.5)';
                     ctx.fill();
                     ctx.fillStyle = '#8a6a10';
-                    ctx.font = '5px monospace';
+                    ctx.font = '4px monospace';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText('₽', cx, cy + 0.5);
@@ -1976,7 +1920,7 @@
                     ctx.arc(e.x, e.y, r, 0, Math.PI * 2);
                     ctx.fillStyle = e.color || '#ff8844';
                     ctx.shadowColor = e.color || '#ff8844';
-                    ctx.shadowBlur = 15;
+                    ctx.shadowBlur = 12;
                     ctx.fill();
                     ctx.shadowBlur = 0;
                     if (alpha > 0.3) {
@@ -1990,45 +1934,43 @@
 
                 ctx.shadowBlur = 0;
                 ctx.fillStyle = 'rgba(200,200,200,0.2)';
-                ctx.font = '9px monospace';
+                ctx.font = '8px monospace';
                 ctx.textAlign = 'right';
                 ctx.textBaseline = 'bottom';
-                ctx.fillText('врагов: ' + state.enemies.filter(e => e.alive).length + '/' + state.maxEnemies, GAME_W - 6,
-                    GAME_H - 3);
+                ctx.fillText('врагов: ' + state.enemies.filter(e => e.alive).length + '/' + state.maxEnemies, GAME_W - 5,
+                    GAME_H - 2);
                 ctx.textAlign = 'left';
-                ctx.fillText('убито: ' + state.enemiesKilled + '/60', 6, GAME_H - 3);
+                ctx.fillText('убито: ' + state.enemiesKilled + '/60', 5, GAME_H - 2);
 
                 if (p.alive) {
                     ctx.fillStyle = 'rgba(200,200,200,0.3)';
-                    ctx.font = '9px monospace';
+                    ctx.font = '8px monospace';
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'top';
                     const deg = (p.barrelAngle * 180 / Math.PI).toFixed(0);
-                    ctx.fillText('🔫 ' + deg + '°', 6, 6);
+                    ctx.fillText('🔫 ' + deg + '°', 5, 5);
                 }
 
                 if (state.paused) {
                     ctx.fillStyle = 'rgba(0,0,0,0.3)';
                     ctx.fillRect(0, 0, GAME_W, GAME_H);
                     ctx.fillStyle = '#b0f0b0';
-                    ctx.font = '24px monospace';
+                    ctx.font = '20px monospace';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText('⏸ ПАУЗА', GAME_W / 2, GAME_H / 2 - 10);
+                    ctx.fillText('⏸ ПАУЗА', GAME_W / 2, GAME_H / 2 - 8);
                     ctx.fillStyle = '#8fca8f';
-                    ctx.font = '14px monospace';
-                    ctx.fillText('нажмите кнопку на экране', GAME_W / 2, GAME_H / 2 + 30);
+                    ctx.font = '12px monospace';
+                    ctx.fillText('нажмите кнопку на экране', GAME_W / 2, GAME_H / 2 + 26);
                 }
             }
 
-            // ─── ИГРОВОЙ ЦИКЛ ──────────────────────────────────────────
             function gameLoop() {
                 update();
                 draw();
                 requestAnimationFrame(gameLoop);
             }
 
-            // ─── ИНИЦИАЛИЗАЦИЯ ────────────────────────────────────────
             function init() {
                 const def = getTankDef('t26');
                 state.player.health = def.health;
@@ -2052,7 +1994,7 @@
                 state.coins = [];
                 state.explosions = [];
                 state.timeSeconds = 0;
-                state.spawnInterval = 120;
+                state.spawnInterval = 130;
                 state.maxEnemies = 2;
                 state.enemiesKilled = 0;
                 state.boss = null;
@@ -2066,10 +2008,9 @@
 
             init();
 
-            // ─── ПОДДЕРЖКА roundRect ──────────────────────────────────
             if (!CanvasRenderingContext2D.prototype.roundRect) {
                 CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-                    const rad = typeof r === 'number' ? r : (r || 4);
+                    const rad = typeof r === 'number' ? r : (r || 3);
                     this.moveTo(x + rad, y);
                     this.lineTo(x + w - rad, y);
                     this.quadraticCurveTo(x + w, y, x + w, y + rad);
