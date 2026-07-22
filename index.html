@@ -4,8 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Танки СССР</title>
+    
+    <!-- PWA Манифест -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJzaG9ydF9uYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJkZXNjcmlwdGlvbiI6ICLQmNCz0YDQsCDQsiDRgdGC0LjQu9C1IFBEQSDQvdCwINGB0L7QstC10YLRgdC60LjRhCDRgtCw0L3QutCw0YUiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhMWEyZSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTFhMmUiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdib3g9JzAgMCAxMDAgMTAwJz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzkwJz7wn5CePC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI2NHg2NCIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld2JveD0nMCAwIDEwMCAxMDAnPjx0ZXh0IHk9Jy45ZW0nIGZvbnQtc2l6ZT0nOTAnPvCfkJ48L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdib3g9JzAgMCAxMDAgMTAwJz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzkwJz7wn5CePC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=" />
+
+    <!-- Мета-теги для PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Танки СССР" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎖️</text></svg>" />
+    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎖️</text></svg>" />
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJzaG9ydF9uYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJkZXNjcmlwdGlvbiI6ICLQmNCz0YDQsCDQsiDRgdGC0LjQu9C1IFBEQSDQvdCwINGB0L7QstC10YLRgdC60LjRhCDRgtCw0L3QutCw0YUiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhMWEyZSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTFhMmUiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdib3g9JzAgMCA2NCA2NCc+PHJlY3Qgd2lkdGg9JzY0JyBoZWlnaHQ9JzY0JyBmaWxsPScjMWEyYTFhJy8+PCEtLSB0YW5rIC0tPjxwYXRoIGQ9J00xMCAzMGg0NHYxOGgtNDR6JyBmaWxsPScjNGE3YTNhJy8+PHBhdGggZD0nTTIyIDIwaDIwdjE0aC0yMHonIGZpbGw9JyM1YThhNGEnLz48cGF0aCBkPSdNMzggMjRoMjB2NGgtMjB6JyBmaWxsPScjMmEyYTJhJy8+PHBhdGggZD0nTTU0IDIyaDZ2OGgtNnonIGZpbGw9JyMyYTJhMmEnLz48cGF0aCBkPSdNOCA0NGg0OHYxMGgtNDh6JyBmaWxsPScjMmEzYTJhJy8+PHBhdGggZD0nTTE0IDQ5YTEwIDEwIDAgMCAwIDAtMjB6JyBmaWxsPScjMWEyYTFhJy8+PHBhdGggZD0nTTI2IDQ5YTEwIDEwIDAgMCAwIDAtMjB6JyBmaWxsPScjMWEyYTFhJy8+PHBhdGggZD0nTTM4IDQ5YTEwIDEwIDAgMCAwIDAtMjB6JyBmaWxsPScjMWEyYTFhJy8+PHBhdGggZD0nTTUwIDQ5YTEwIDEwIDAgMCAwIDAtMjB6JyBmaWxsPScjMWEyYTFhJy8+PHRleHQgeD0nMzInIHk9JzI3JyBmb250LXNpemU9JzE2JyB0ZXh0LWFuY2hvcj0nY2VudGVyJyBmaWxsPScjY2MyMjIyJz7iiKU8L3RleHQ+PC9zdmc+IgogICAgfQogIF0KfQ==" />
+    
     <style>
         /* ─── RESET & BASE ───────────────────────────────────────────── */
         * {
@@ -34,7 +44,7 @@
             padding: 10px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), inset 0 0 0 2px #2a2a3e, inset 0 0 0 4px #0e0e1a;
             position: relative;
-            max-width: 580px;
+            max-width: 620px;
             width: 100%;
             max-height: 98vh;
             display: flex;
@@ -42,22 +52,38 @@
             overflow: hidden;
         }
 
-        /* ─── INSTALL BUTTON ──────────────────────────────────────────── */
-        #installContainer {
+        /* ─── БАННЕР УСТАНОВКИ PWA ──────────────────────────────────── */
+        #installBanner {
             display: none;
-            padding: 4px 6px 2px 6px;
-            background: rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid #3a5a3a;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 30, 20, 0.95);
+            border: 2px solid #3a6a3a;
+            border-radius: 12px;
+            padding: 8px 16px;
+            color: #8fca8f;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            z-index: 25;
             text-align: center;
+            max-width: 90%;
+            box-shadow: 0 0 30px rgba(0, 40, 0, 0.3);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        #installContainer.show {
-            display: block;
+        #installBanner.show {
+            display: flex;
         }
-        .install-btn-header {
+        #installBanner .install-btn {
             background: #2a4a3a;
             border: none;
             border-radius: 8px;
-            padding: 4px 16px;
+            padding: 5px 16px;
             color: #b0f0b0;
             font-family: 'Courier New', monospace;
             font-weight: bold;
@@ -66,14 +92,22 @@
             box-shadow: 0 3px 0 #142a1a;
             transition: all 0.08s;
             touch-action: manipulation;
-            letter-spacing: 0.5px;
-            width: 100%;
         }
-        .install-btn-header:active {
+        #installBanner .install-btn:active {
             transform: translateY(3px);
             box-shadow: 0 0px 0 #142a1a;
         }
+        #installBanner .close-install {
+            background: none;
+            border: none;
+            color: #6a8a6a;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            padding: 0 4px;
+        }
 
+        /* ─── HUD ──────────────────────────────────────────────────── */
         #hud {
             display: flex;
             justify-content: space-between;
@@ -117,6 +151,7 @@
         #bossHud { border-color: #cc4444; display: none; }
         #bossHud .value { color: #ff6666; }
 
+        /* ─── CANVAS ────────────────────────────────────────────────── */
         #canvasWrapper {
             flex: 1;
             position: relative;
@@ -138,14 +173,15 @@
             border-radius: 4px;
         }
 
+        /* ─── CONTROLS (УВЕЛИЧЕННЫЕ КНОПКИ) ─────────────────────────── */
         #controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 6px 8px 6px;
+            padding: 6px 8px 10px 8px;
             background: rgba(0, 0, 0, 0.5);
             border-top: 2px solid #3a5a3a;
-            gap: 4px;
+            gap: 6px;
             flex-shrink: 0;
             flex-wrap: nowrap;
             border-radius: 0 0 10px 10px;
@@ -153,24 +189,25 @@
         }
         .ctrl-group {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             align-items: center;
             flex-shrink: 0;
         }
 
+        /* ─── ОСНОВНЫЕ КНОПКИ (УВЕЛИЧЕНЫ) ───────────────────────────── */
         .ctrl-btn {
             background: #3a3a52;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 0;
-            font-size: 16px;
+            font-size: 20px;
             color: #b0b0d0;
-            box-shadow: 0 3px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
             cursor: pointer;
             transition: all 0.06s ease;
             touch-action: manipulation;
-            width: 44px;
-            height: 44px;
+            width: 54px;
+            height: 54px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -182,73 +219,101 @@
             flex-shrink: 0;
         }
         .ctrl-btn:active {
-            transform: translateY(3px);
+            transform: translateY(4px);
             box-shadow: 0 0px 0 #1a1a2a;
         }
 
+        /* КНОПКА ВЫСТРЕЛА — САМАЯ БОЛЬШАЯ */
         .ctrl-btn.fire {
             background: #6a2a2a;
             color: #ff8888;
-            box-shadow: 0 3px 0 #3a1212, inset 0 1px 0 rgba(255, 100, 100, 0.2);
-            width: 56px;
-            height: 50px;
-            font-size: 22px;
+            box-shadow: 0 4px 0 #3a1212, inset 0 1px 0 rgba(255, 100, 100, 0.2);
+            width: 72px;
+            height: 64px;
+            font-size: 28px;
+            border-radius: 14px;
         }
-        .ctrl-btn.fire:active { background: #8a3a3a; }
+        .ctrl-btn.fire:active {
+            background: #8a3a3a;
+        }
 
         .ctrl-btn.shop-btn {
             background: #2a4a3a;
             color: #8fca8f;
-            box-shadow: 0 3px 0 #142a1a, inset 0 1px 0 rgba(100, 255, 100, 0.1);
-            font-size: 14px;
+            box-shadow: 0 4px 0 #142a1a, inset 0 1px 0 rgba(100, 255, 100, 0.1);
+            font-size: 18px;
         }
         .ctrl-btn.shop-btn:active { background: #3a5a4a; }
 
         .ctrl-btn.pause-btn {
             background: #4a3a2a;
             color: #f0d080;
-            box-shadow: 0 3px 0 #2a1a0a;
-            font-size: 14px;
+            box-shadow: 0 4px 0 #2a1a0a;
+            font-size: 18px;
         }
         .ctrl-btn.pause-btn:active { background: #5a4a3a; }
 
         .ctrl-btn.barrel {
             background: #3a3a4a;
             color: #a0b0d0;
-            box-shadow: 0 3px 0 #1a1a2a;
-            font-size: 14px;
-            width: 38px;
+            box-shadow: 0 4px 0 #1a1a2a;
+            font-size: 18px;
+            width: 48px;
         }
         .ctrl-btn.barrel:active { background: #4a4a5a; }
 
         .ctrl-btn.restart-btn {
             background: #4a2a2a;
             color: #ff8888;
-            box-shadow: 0 3px 0 #2a1212;
-            font-size: 14px;
+            box-shadow: 0 4px 0 #2a1212;
+            font-size: 18px;
         }
         .ctrl-btn.restart-btn:active { background: #5a3a3a; }
 
         .ctrl-btn.fullscreen-btn {
             background: #2a3a4a;
             color: #8fcaf0;
-            box-shadow: 0 3px 0 #1a2a3a;
-            font-size: 16px;
+            box-shadow: 0 4px 0 #1a2a3a;
+            font-size: 20px;
         }
         .ctrl-btn.fullscreen-btn:active { background: #3a4a5a; }
+
+        /* КНОПКА УСТАНОВКИ — ВЫДЕЛЕННАЯ */
+        .ctrl-btn.install-app-btn {
+            background: #2a5a3a;
+            color: #8fca8f;
+            box-shadow: 0 4px 0 #1a3a1a, inset 0 1px 0 rgba(100, 255, 100, 0.15);
+            font-size: 18px;
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            animation: pulse-install 2s infinite;
+        }
+        .ctrl-btn.install-app-btn:active {
+            background: #3a6a4a;
+        }
+        .ctrl-btn.install-app-btn.hidden {
+            display: none;
+        }
+
+        @keyframes pulse-install {
+            0%, 100% { box-shadow: 0 4px 0 #1a3a1a, inset 0 1px 0 rgba(100, 255, 100, 0.15); }
+            50% { box-shadow: 0 4px 0 #1a3a1a, inset 0 1px 0 rgba(100, 255, 100, 0.3), 0 0 20px rgba(60, 200, 60, 0.2); }
+        }
 
         .ctrl-btn:disabled {
             opacity: 0.4;
             transform: translateY(2px);
-            box-shadow: 0 1px 0 #1a1a2a;
+            box-shadow: 0 2px 0 #1a1a2a;
             pointer-events: none;
         }
 
+        /* ─── D-PAD (УВЕЛИЧЕН) ────────────────────────────────────────── */
         .dpad {
             display: grid;
-            grid-template-columns: 44px 44px 44px;
-            grid-template-rows: 44px 44px 44px;
-            gap: 3px;
+            grid-template-columns: 54px 54px 54px;
+            grid-template-rows: 54px 54px 54px;
+            gap: 4px;
             justify-items: center;
             align-items: center;
             flex-shrink: 0;
@@ -256,14 +321,14 @@
         .dpad .ctrl-btn {
             width: 100%;
             height: 100%;
-            border-radius: 10px;
-            font-size: 20px;
-            box-shadow: 0 3px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 24px;
+            box-shadow: 0 4px 0 #1a1a2a, inset 0 1px 0 rgba(255, 255, 255, 0.1);
             background: #3a3a52;
             color: #b0b0d0;
         }
         .dpad .ctrl-btn:active {
-            transform: translateY(3px);
+            transform: translateY(4px);
             box-shadow: 0 0px 0 #1a1a2a;
         }
         #btnUp { grid-column: 2; grid-row: 1; }
@@ -435,33 +500,45 @@
         }
         .shop-close:active { transform: translateY(3px); box-shadow: 0 0px 0 #2a1212; }
 
+        /* Скрываем баннер в установленном приложении */
+        @media (display-mode: standalone) {
+            #installBanner {
+                display: none !important;
+            }
+            .ctrl-btn.install-app-btn {
+                display: none !important;
+            }
+        }
+
+        /* ─── АДАПТИВ ────────────────────────────────────────────────── */
         @media (max-width: 500px) {
             #gameContainer { padding: 6px; max-width: 100%; border-radius: 14px; }
             .ctrl-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 13px;
-                border-radius: 8px;
+                width: 46px;
+                height: 46px;
+                font-size: 17px;
+                border-radius: 10px;
             }
             .ctrl-btn.fire {
-                width: 48px;
-                height: 44px;
-                font-size: 18px;
+                width: 60px;
+                height: 54px;
+                font-size: 24px;
             }
-            .ctrl-btn.barrel { width: 34px; font-size: 12px; }
-            .ctrl-btn.fullscreen-btn { font-size: 14px; }
+            .ctrl-btn.barrel { width: 40px; font-size: 15px; }
+            .ctrl-btn.fullscreen-btn { font-size: 17px; }
+            .ctrl-btn.install-app-btn { width: 46px; height: 46px; font-size: 16px; }
             .dpad {
-                grid-template-columns: 38px 38px 38px;
-                grid-template-rows: 38px 38px 38px;
-                gap: 2px;
+                grid-template-columns: 46px 46px 46px;
+                grid-template-rows: 46px 46px 46px;
+                gap: 3px;
             }
-            .dpad .ctrl-btn { font-size: 17px; }
+            .dpad .ctrl-btn { font-size: 20px; }
+            #controls { padding: 4px 6px 8px 6px; gap: 4px; }
+            .ctrl-group { gap: 4px; }
             #hud { font-size: 8px; padding: 2px 4px; min-height: 22px; }
             .hud-item .value { font-size: 8px; min-width: 12px; }
             .hud-item .label { font-size: 6px; }
             .hud-tank { font-size: 7px; padding: 1px 4px; }
-            #controls { padding: 3px 4px 6px 4px; gap: 3px; }
-            .ctrl-group { gap: 3px; }
             .overlay-box { padding: 14px 16px; }
             .overlay-box h1 { font-size: 20px; }
             .shop-panel { padding: 10px 12px 12px 12px; }
@@ -470,30 +547,32 @@
             .shop-item .s-stats { font-size: 6px; }
             .shop-item .s-price { font-size: 10px; min-width: 28px; }
             .shop-item .s-action { font-size: 8px; padding: 1px 8px; }
-            .install-btn-header { font-size: 10px; padding: 3px 12px; }
+            #installBanner { font-size: 10px; padding: 6px 12px; }
+            #installBanner .install-btn { font-size: 10px; padding: 4px 12px; }
         }
         @media (max-width: 400px) {
             .ctrl-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 11px;
-                border-radius: 7px;
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+                border-radius: 8px;
             }
             .ctrl-btn.fire {
-                width: 42px;
-                height: 38px;
-                font-size: 16px;
+                width: 52px;
+                height: 46px;
+                font-size: 20px;
             }
-            .ctrl-btn.barrel { width: 30px; font-size: 10px; }
-            .ctrl-btn.fullscreen-btn { font-size: 12px; }
+            .ctrl-btn.barrel { width: 36px; font-size: 13px; }
+            .ctrl-btn.fullscreen-btn { font-size: 15px; }
+            .ctrl-btn.install-app-btn { width: 40px; height: 40px; font-size: 14px; }
             .dpad {
-                grid-template-columns: 34px 34px 34px;
-                grid-template-rows: 34px 34px 34px;
-                gap: 2px;
+                grid-template-columns: 40px 40px 40px;
+                grid-template-rows: 40px 40px 40px;
+                gap: 3px;
             }
-            .dpad .ctrl-btn { font-size: 14px; }
-            #controls { padding: 2px 3px 5px 3px; }
-            .ctrl-group { gap: 2px; }
+            .dpad .ctrl-btn { font-size: 17px; }
+            #controls { padding: 3px 4px 6px 4px; }
+            .ctrl-group { gap: 3px; }
             #hud { font-size: 7px; min-height: 20px; }
             .hud-item { padding: 0px 3px; }
             .hud-item .value { font-size: 7px; min-width: 10px; }
@@ -502,41 +581,32 @@
         @media (orientation: landscape) and (max-height: 450px) {
             #gameContainer { max-height: 96vh; padding: 4px; }
             #hud { font-size: 7px; min-height: 18px; padding: 1px 3px; }
-            #controls { padding: 2px 3px 4px 3px; }
+            #controls { padding: 2px 4px 6px 4px; }
             .ctrl-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 11px;
-                border-radius: 6px;
+                width: 38px;
+                height: 38px;
+                font-size: 13px;
+                border-radius: 8px;
             }
             .ctrl-btn.fire {
-                width: 40px;
-                height: 36px;
-                font-size: 14px;
+                width: 48px;
+                height: 42px;
+                font-size: 18px;
             }
-            .ctrl-btn.barrel { width: 28px; font-size: 10px; }
-            .ctrl-btn.fullscreen-btn { font-size: 12px; }
+            .ctrl-btn.barrel { width: 34px; font-size: 12px; }
+            .ctrl-btn.fullscreen-btn { font-size: 14px; }
+            .ctrl-btn.install-app-btn { width: 38px; height: 38px; font-size: 13px; }
             .dpad {
-                grid-template-columns: 32px 32px 32px;
-                grid-template-rows: 32px 32px 32px;
+                grid-template-columns: 38px 38px 38px;
+                grid-template-rows: 38px 38px 38px;
                 gap: 2px;
             }
-            .dpad .ctrl-btn { font-size: 13px; }
-            .install-btn-header { font-size: 9px; padding: 2px 10px; }
-        }
-        /* Скрываем кнопку установки в PWA-режиме */
-        @media (display-mode: standalone) {
-            #installContainer { display: none !important; }
+            .dpad .ctrl-btn { font-size: 16px; }
         }
     </style>
 </head>
 <body>
     <div id="gameContainer">
-        <!-- Кнопка установки -->
-        <div id="installContainer">
-            <button class="install-btn-header" id="installBtn">📲 УСТАНОВИТЬ ИГРУ</button>
-        </div>
-
         <!-- HUD -->
         <div id="hud">
             <div class="hud-item">
@@ -592,12 +662,20 @@
                 <button class="ctrl-btn shop-btn" id="btnShop">🏪</button>
                 <button class="ctrl-btn restart-btn" id="btnRestart">🔄</button>
                 <button class="ctrl-btn fullscreen-btn" id="btnFullscreen">⛶</button>
+                <button class="ctrl-btn install-app-btn" id="btnInstallApp">⬇️</button>
             </div>
             <div class="ctrl-group">
                 <button class="ctrl-btn barrel" id="btnBarrelUp">↗</button>
                 <button class="ctrl-btn barrel" id="btnBarrelDown">↘</button>
                 <button class="ctrl-btn fire" id="btnFire">🔥</button>
             </div>
+        </div>
+
+        <!-- Баннер установки PWA -->
+        <div id="installBanner">
+            <button class="close-install" id="closeInstall">✕</button>
+            <span>📱 Установить как приложение</span>
+            <button class="install-btn" id="installBtn">⬇ УСТАНОВИТЬ</button>
         </div>
 
         <!-- Оверлеи -->
@@ -634,36 +712,54 @@
 
             // ─── PWA INSTALL ────────────────────────────────────────────
             let deferredPrompt = null;
-            const installContainer = document.getElementById('installContainer');
+            const installBanner = document.getElementById('installBanner');
             const installBtn = document.getElementById('installBtn');
+            const closeInstall = document.getElementById('closeInstall');
+            const installAppBtn = document.getElementById('btnInstallApp');
 
-            // Проверяем, установлено ли уже приложение
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                window.navigator.standalone === true;
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                               window.navigator.standalone === true;
 
-            // Показываем баннер только если не в standalone режиме и доступна установка
+            if (isStandalone) {
+                installBanner.classList.remove('show');
+                installAppBtn.classList.add('hidden');
+            }
+
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
                 if (!isStandalone) {
-                    installContainer.classList.add('show');
+                    installBanner.classList.add('show');
+                    installAppBtn.classList.remove('hidden');
                 }
             });
 
-            installBtn.addEventListener('click', async () => {
+            function triggerInstall() {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
-                    const result = await deferredPrompt.userChoice;
-                    if (result.outcome === 'accepted') {
-                        installContainer.classList.remove('show');
-                    }
-                    deferredPrompt = null;
+                    deferredPrompt.userChoice.then((result) => {
+                        if (result.outcome === 'accepted') {
+                            installBanner.classList.remove('show');
+                            installAppBtn.classList.add('hidden');
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    // Если браузер не поддерживает beforeinstallprompt, предлагаем альтернативу
+                    alert('Нажмите "Добавить на рабочий стол" в меню браузера, чтобы установить приложение.');
                 }
+            }
+
+            installBtn.addEventListener('click', triggerInstall);
+            installAppBtn.addEventListener('click', triggerInstall);
+
+            closeInstall.addEventListener('click', () => {
+                installBanner.classList.remove('show');
             });
 
-            // Скрываем баннер после установки
             window.addEventListener('appinstalled', () => {
-                installContainer.classList.remove('show');
+                installBanner.classList.remove('show');
+                installAppBtn.classList.add('hidden');
             });
 
             // ─── FULLSCREEN TOGGLE ─────────────────────────────────────
@@ -830,13 +926,9 @@
 
             // ─── ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ──────────────────────────────
             function rand(min, max) { return Math.random() * (max - min) + min; }
-
             function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
-
             function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-
             function getTankDef(id) { return TANK_DEFS[id] || TANK_DEFS['t26']; }
-
             function getPlayerTankDef() { return getTankDef(state.currentTankId); }
 
             // ─── ОБНОВИТЬ HUD ──────────────────────────────────────────
