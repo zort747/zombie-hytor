@@ -84,6 +84,9 @@
         #installBtnFixed .icon-install {
             font-size: 16px;
         }
+        #installBtnFixed.installed {
+            display: none !important;
+        }
 
         /* ─── HUD ──────────────────────────────────────────────────── */
         #hud {
@@ -654,33 +657,87 @@
             // ─── PWA INSTALL ────────────────────────────────────────────
             let deferredPrompt = null;
             const installBtn = document.getElementById('installBtnFixed');
-
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
                                window.navigator.standalone === true;
 
-            // Показываем кнопку, если можно установить
+            // Если уже установлено как приложение — скрываем кнопку
+            if (isStandalone) {
+                installBtn.classList.remove('show');
+                installBtn.classList.add('installed');
+            }
+
+            // Обработчик события установки
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
+                // Показываем кнопку только если не в standalone режиме
                 if (!isStandalone) {
                     installBtn.classList.add('show');
+                    installBtn.classList.remove('installed');
                 }
             });
 
+            // Обработчик нажатия на кнопку установки
             installBtn.addEventListener('click', async () => {
                 if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const result = await deferredPrompt.userChoice;
-                    if (result.outcome === 'accepted') {
-                        installBtn.classList.remove('show');
+                    try {
+                        // Показываем диалог установки
+                        deferredPrompt.prompt();
+                        const result = await deferredPrompt.userChoice;
+                        if (result.outcome === 'accepted') {
+                            // Успешная установка
+                            installBtn.classList.remove('show');
+                            installBtn.classList.add('installed');
+                            // Показываем уведомление об успешной установке
+                            setTimeout(() => {
+                                alert('Игра успешно установлена! Найдите её на рабочем столе.');
+                            }, 500);
+                        } else {
+                            // Пользователь отменил установку
+                            console.log('Установка отменена');
+                        }
+                        deferredPrompt = null;
+                    } catch (err) {
+                        console.log('Ошибка установки:', err);
+                        // Показываем инструкцию, если установка не удалась
+                        alert('Для установки приложения нажмите кнопку "Установить" в адресной строке браузера');
                     }
-                    deferredPrompt = null;
+                } else {
+                    // Если deferredPrompt отсутствует, пробуем альтернативный способ
+                    // Для некоторых браузеров или при повторном открытии
+                    if (window.navigator.standalone !== true) {
+                        // Проверяем, поддерживается ли установка
+                        if ('BeforeInstallPromptEvent' in window) {
+                            alert('Пожалуйста, обновите страницу и попробуйте снова.');
+                        } else {
+                            // Для Safari на iOS — инструкция по установке
+                            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                            if (isIOS) {
+                                alert('Для установки на iPhone/iPad:\n1. Нажмите кнопку "Поделиться"\n2. Выберите "На экран «Домой»"');
+                            } else {
+                                alert('Для установки приложения нажмите кнопку "Установить" в адресной строке браузера');
+                            }
+                        }
+                    }
                 }
             });
 
+            // Событие успешной установки
             window.addEventListener('appinstalled', () => {
                 installBtn.classList.remove('show');
+                installBtn.classList.add('installed');
+                deferredPrompt = null;
+                // Показываем уведомление
+                setTimeout(() => {
+                    alert('Игра успешно установлена! Найдите её на рабочем столе.');
+                }, 300);
             });
+
+            // Дополнительная обработка для iOS
+            if (window.navigator.standalone === true) {
+                installBtn.classList.remove('show');
+                installBtn.classList.add('installed');
+            }
 
             // ─── FULLSCREEN TOGGLE ─────────────────────────────────────
             const fullscreenBtn = document.getElementById('btnFullscreen');
