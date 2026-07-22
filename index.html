@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>Танки СССР</title>
+    <title>Танки СССР — PWA</title>
     
     <!-- PWA Манифест -->
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJzaG9ydF9uYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJkZXNjcmlwdGlvbiI6ICLQmNCz0YDQsCDQsiDRgdGC0LjQu9C1IFBEQSDQvdCwINGB0L7QstC10YLRgdC60LjRhCDRgtCw0L3QutCw0YUiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhMWEyZSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTFhMmUiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdib3g9JzAgMCAxMDAgMTAwJz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzkwJz7wn5CePC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI2NHg2NCIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld2JveD0nMCAwIDEwMCAxMDAnPjx0ZXh0IHk9Jy45ZW0nIGZvbnQtc2l6ZT0nOTAnPvCfkJ48L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdib3g9JzAgMCAxMDAgMTAwJz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzkwJz7wn5CePC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=" />
@@ -660,80 +660,57 @@
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
                                window.navigator.standalone === true;
 
-            // Если уже установлено как приложение — скрываем кнопку
             if (isStandalone) {
                 installBtn.classList.remove('show');
                 installBtn.classList.add('installed');
             }
 
-            // Обработчик события установки
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                // Показываем кнопку только если не в standalone режиме
                 if (!isStandalone) {
                     installBtn.classList.add('show');
                     installBtn.classList.remove('installed');
                 }
             });
 
-            // Обработчик нажатия на кнопку установки
             installBtn.addEventListener('click', async () => {
                 if (deferredPrompt) {
                     try {
-                        // Показываем диалог установки
                         deferredPrompt.prompt();
                         const result = await deferredPrompt.userChoice;
                         if (result.outcome === 'accepted') {
-                            // Успешная установка
                             installBtn.classList.remove('show');
                             installBtn.classList.add('installed');
-                            // Показываем уведомление об успешной установке
                             setTimeout(() => {
                                 alert('Игра успешно установлена! Найдите её на рабочем столе.');
                             }, 500);
-                        } else {
-                            // Пользователь отменил установку
-                            console.log('Установка отменена');
                         }
                         deferredPrompt = null;
                     } catch (err) {
-                        console.log('Ошибка установки:', err);
-                        // Показываем инструкцию, если установка не удалась
                         alert('Для установки приложения нажмите кнопку "Установить" в адресной строке браузера');
                     }
                 } else {
-                    // Если deferredPrompt отсутствует, пробуем альтернативный способ
-                    // Для некоторых браузеров или при повторном открытии
                     if (window.navigator.standalone !== true) {
-                        // Проверяем, поддерживается ли установка
-                        if ('BeforeInstallPromptEvent' in window) {
-                            alert('Пожалуйста, обновите страницу и попробуйте снова.');
+                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                        if (isIOS) {
+                            alert('Для установки на iPhone/iPad:\n1. Нажмите кнопку "Поделиться"\n2. Выберите "На экран «Домой»"');
                         } else {
-                            // Для Safari на iOS — инструкция по установке
-                            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                            if (isIOS) {
-                                alert('Для установки на iPhone/iPad:\n1. Нажмите кнопку "Поделиться"\n2. Выберите "На экран «Домой»"');
-                            } else {
-                                alert('Для установки приложения нажмите кнопку "Установить" в адресной строке браузера');
-                            }
+                            alert('Для установки приложения нажмите кнопку "Установить" в адресной строке браузера');
                         }
                     }
                 }
             });
 
-            // Событие успешной установки
             window.addEventListener('appinstalled', () => {
                 installBtn.classList.remove('show');
                 installBtn.classList.add('installed');
                 deferredPrompt = null;
-                // Показываем уведомление
                 setTimeout(() => {
                     alert('Игра успешно установлена! Найдите её на рабочем столе.');
                 }, 300);
             });
 
-            // Дополнительная обработка для iOS
             if (window.navigator.standalone === true) {
                 installBtn.classList.remove('show');
                 installBtn.classList.add('installed');
@@ -811,21 +788,21 @@
             const bossHud = document.getElementById('bossHud');
             const bossHpDisplay = document.getElementById('bossHpDisplay');
 
-            // ─── ОПРЕДЕЛЕНИЯ ТАНКОВ ────────────────────────────────────
+            // ─── ОПРЕДЕЛЕНИЯ ТАНКОВ (ЦЕНЫ СНИЖЕНЫ) ──────────────────
             const TANK_DEFS = {
                 't26': { id: 't26', name: 'Т-26', cost: 0, speed: 2.2, fireRate: 30, damage: 1, health: 3,
                     bulletSpeed: 4.2, color: '#5a7a3a', trackColor: '#3a4a2a', turretColor: '#6a8a4a', star: true },
-                'bt7': { id: 'bt7', name: 'БТ-7', cost: 50, speed: 3.4, fireRate: 24, damage: 1, health: 3,
+                'bt7': { id: 'bt7', name: 'БТ-7', cost: 30, speed: 3.4, fireRate: 24, damage: 1, health: 3,
                     bulletSpeed: 4.6, color: '#6a8a4a', trackColor: '#4a5a3a', turretColor: '#7a9a5a', star: true },
-                't34': { id: 't34', name: 'Т-34', cost: 100, speed: 2.8, fireRate: 20, damage: 2, health: 5,
+                't34': { id: 't34', name: 'Т-34', cost: 60, speed: 2.8, fireRate: 20, damage: 2, health: 5,
                     bulletSpeed: 5.0, color: '#4a7a3a', trackColor: '#2a4a2a', turretColor: '#5a8a4a', star: true },
-                'kv1': { id: 'kv1', name: 'КВ-1', cost: 180, speed: 1.8, fireRate: 24, damage: 2, health: 8,
+                'kv1': { id: 'kv1', name: 'КВ-1', cost: 100, speed: 1.8, fireRate: 24, damage: 2, health: 8,
                     bulletSpeed: 4.4, color: '#3a6a3a', trackColor: '#2a3a2a', turretColor: '#4a7a4a', star: true },
-                'is2': { id: 'is2', name: 'ИС-2', cost: 280, speed: 2.0, fireRate: 26, damage: 3, health: 7,
+                'is2': { id: 'is2', name: 'ИС-2', cost: 150, speed: 2.0, fireRate: 26, damage: 3, health: 7,
                     bulletSpeed: 4.8, color: '#2a5a2a', trackColor: '#1a3a1a', turretColor: '#3a6a3a', star: true },
-                't54': { id: 't54', name: 'Т-54', cost: 450, speed: 3.8, fireRate: 16, damage: 3, health: 6,
+                't54': { id: 't54', name: 'Т-54', cost: 220, speed: 3.8, fireRate: 16, damage: 3, health: 6,
                     bulletSpeed: 5.4, color: '#4a7a5a', trackColor: '#2a4a3a', turretColor: '#5a8a6a', star: true },
-                't62': { id: 't62', name: 'Т-62', cost: 650, speed: 3.6, fireRate: 14, damage: 4, health: 8,
+                't62': { id: 't62', name: 'Т-62', cost: 300, speed: 3.6, fireRate: 14, damage: 4, health: 8,
                     bulletSpeed: 5.6, color: '#4a6a5a', trackColor: '#2a4a3a', turretColor: '#5a7a6a', star: true }
             };
 
@@ -992,7 +969,7 @@
                     bulletSpeed: Math.max(1.1, bulletSpeed),
                     fireRate: Math.max(32, fireRate),
                     fireCooldown: randInt(20, 50),
-                    reward: 5,
+                    reward: 10, // Теперь 10 монет за убийство
                     alive: true,
                     hitFlash: 0,
                     trackOffset: rand(0, 100)
@@ -1112,7 +1089,7 @@
                 if (!enemy.alive) return;
                 enemy.alive = false;
                 state.score += 10 + state.level * 2;
-                state.money += 5;
+                state.money += 10; // 10 монет за убийство
                 if (state.player.health < state.player.maxHealth) {
                     state.player.health += 1;
                     if (state.player.health > state.player.maxHealth) state.player.health = state.player.maxHealth;
