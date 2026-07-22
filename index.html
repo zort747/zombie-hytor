@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>Танки СССР — PWA</title>
+    <title>Танки СССР</title>
     
-    <!-- PWA Манифест -->
+    <!-- PWA Манифест (встроенный) -->
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJzaG9ydF9uYW1lIjogItCi0LDQvdC60Lgg0KHQodCh0KAiLAogICJkZXNjcmlwdGlvbiI6ICLQmNCz0YDQsCDQsiDRgdGC0LjQu9C1IFBEQSDQvdCwINGB0L7QstC10YLRgdC60LjRhCDRgtCw0L3QutCw0YUiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzFhMWEyZSIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTFhMmUiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdib3g9JzAgMCAxMDAgMTAwJz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzkwJz7wn5CePC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI2NHg2NCIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld2JveD0nMCAwIDEwMCAxMDAnPjx0ZXh0IHk9Jy45ZW0nIGZvbnQtc2l6ZT0nOTAnPvCfkJ48L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdib3g9JzAgMCAxMDAgMTAwJz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzkwJz7wn5CePC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=" />
 
     <!-- Мета-теги для PWA -->
@@ -969,7 +969,7 @@
                     bulletSpeed: Math.max(1.1, bulletSpeed),
                     fireRate: Math.max(32, fireRate),
                     fireCooldown: randInt(20, 50),
-                    reward: 10, // Теперь 10 монет за убийство
+                    reward: 10,
                     alive: true,
                     hitFlash: 0,
                     trackOffset: rand(0, 100)
@@ -1089,7 +1089,7 @@
                 if (!enemy.alive) return;
                 enemy.alive = false;
                 state.score += 10 + state.level * 2;
-                state.money += 10; // 10 монет за убийство
+                state.money += 10;
                 if (state.player.health < state.player.maxHealth) {
                     state.player.health += 1;
                     if (state.player.health > state.player.maxHealth) state.player.health = state.player.maxHealth;
